@@ -18,6 +18,7 @@ class Reg_page extends State<Reg_p> {
       theme: ThemeData(primaryColor: Colors.green),
       home: Scaffold(
           appBar: AppBar(
+            //fvbfd
             backgroundColor: Colors.white,
             title: Text('Личный кабинет', style:
             TextStyle(
