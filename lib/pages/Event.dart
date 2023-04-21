@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:im2/pages/home.dart';
 
+class Comment{
+  String autor_name = "";
+  String autor_age = "";
+  String comment = "";
+  //String autor_photo = "";
+}
+
+String comment_txt = "";
+List<Comment> Comment_list = [];
+
 class Event_page extends StatelessWidget {
   const Event_page({Key? key}) : super(key: key);
+
 
   // void Current_event(String name,String short_description,String autor_name, String long_description,String place,String date,String time,){
   //
@@ -30,6 +41,8 @@ class Event_page extends StatelessWidget {
         ),
         centerTitle: false,
       ),
+
+
       body:
         Column(
           children: [
@@ -281,7 +294,35 @@ class Event_page extends StatelessWidget {
               ],
             ),
             SizedBox(
-              height: 30,
+              height: 20,
+            ),
+            SizedBox(
+              height: 330,
+              width: 280,
+              child:
+              ListView.builder(
+                itemCount: Comment_list.length,
+                itemBuilder: (BuildContext context, int index){
+                  // return Flexible(
+                  //   child:
+                  //   Container(
+                      //color: Colors.lightGreenAccent,
+                      //child:
+                      return Text(
+                        key: Key(Comment_list[index].comment),
+                        Comment_list[index].comment,
+                        softWrap: true,
+                        maxLines: 3,
+                        style:
+                        TextStyle(
+                          fontSize: 17,
+                          fontFamily: 'Oswald',
+                          color: Color.fromARGB(255, 16, 79, 58),
+                        ),);
+                  //   )
+                  // );
+                }
+              ),
             ),
             Row(
               children: [
@@ -315,20 +356,24 @@ class Event_page extends StatelessWidget {
                           labelStyle: TextStyle(fontSize: 13, color: Colors.blueGrey, fontFamily: 'Oswald'),
                           contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
                         ),
-                        //onChanged: (){}
+                        onChanged: (String comment) {
+                          comment_txt = comment;
+                        },
                       ),
                     )
 
                   ],
                 ),
 
-                ListView(
-
-                ),
                 SizedBox(width: 3,),
                 Column(
                   children: [
-                    IconButton(onPressed: (){},
+                    IconButton(onPressed: (){
+                      Comment_list.add(Comment());
+                      Comment_list.last.comment = comment_txt;
+                      comment_txt = "";
+                      print(Comment_list.length);
+                    },
                         icon: Icon(
                           color: Color.fromARGB(255, 247, 190, 59),
                           Icons.arrow_circle_right_rounded,
