@@ -64,6 +64,8 @@ flutter:
   assets:
     - assets/im2_logo.png
     - assets/wom.jpeg
+    - assets/line.jpg
+    - assets/Vector_1.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

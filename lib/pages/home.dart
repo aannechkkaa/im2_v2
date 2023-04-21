@@ -1,6 +1,7 @@
 import 'dart:html';
 
 import 'package:flutter/material.dart';
+import 'Event.dart';
 
 
 
@@ -12,6 +13,7 @@ class Event{
   String place = "";
   String date = "";
   String time = "";
+  int id = 0;
 }
 String e_name = "";
 String s_description = "";
@@ -71,7 +73,13 @@ class HomeState extends State<Home>{
                   side: BorderSide(color: Colors.white,
                       width: 1),
                   ),
-              onPressed: (){},
+              onPressed: (){
+                  //Navigator.pushNamed(context, '/event');
+                //Event_page() event_page = new Event_page();
+                  Navigator.push(context, new MaterialPageRoute(
+                      builder: (context) => new Event_page(key: Key(Events_list[index].name),))
+                  );
+              },
                 key: Key(Events_list[index].name),
                 child: Container(
                   margin: const EdgeInsets.only(top: 10),
@@ -91,44 +99,80 @@ class HomeState extends State<Home>{
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              SizedBox(
+                                width: 70,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(width : 20),
+                                    Text(Events_list[index].date,
 
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(width : 20),
-                                  Text(Events_list[index].date,
+                                      style:
+                                      TextStyle(
+                                        fontSize: 21,
+                                        fontFamily: 'Oswald',
+                                        color: Colors.white,
+                                      ),),
 
-                                    style:
-                                    TextStyle(
-                                      fontSize: 21,
-                                      fontFamily: 'Oswald',
-                                      color: Colors.white,
-                                    ),),
+                                    Text(Events_list[index].time,
+                                      style:
+                                      TextStyle(
+                                        fontSize: 21,
+                                        fontFamily: 'Oswald',
+                                        color: Color.fromARGB(255, 247, 183, 59),
+                                      ),),
 
-                                  Text(Events_list[index].time,
-                                    style:
-                                    TextStyle(
-                                      fontSize: 21,
-                                      fontFamily: 'Oswald',
-                                      color: Color.fromARGB(255, 247, 183, 59),
-                                    ),),
-                                  SizedBox(height : 10),
-                                  Row(
-                                    children: [
-                                      Icon(Icons.place_outlined),
-                                      Text(Events_list[index].place,
-                                        style:
-                                        TextStyle(
-                                          fontSize: 15,
-                                          fontFamily: 'Oswald',
-                                          color: Color.fromARGB(255, 154, 220, 184),
-                                        ),),
-                                    ],
-                                  )
-                                ],
+                                    SizedBox(height : 10),
+                                    Row(
+
+                                      children: [
+
+
+                                        SizedBox(
+                                          width: 70,
+                                          child: Column(
+                                              children: [
+
+                                                  //Icon(Icons.place_outlined),
+
+                                                // Flexible
+                                                //   (child: new Text(Events_list[index].place,
+                                                //   style: TextStyle(
+                                                //     fontSize: 15,
+                                                //     fontFamily: 'Oswald',
+                                                //     color: Color.fromARGB(255, 154, 220, 184),),
+                                                //   overflow: TextOverflow.clip,),),
+
+
+                                                  Text(Events_list[index].place,
+                                                    softWrap: true,
+                                                    maxLines: 2,
+
+                                                    style:
+                                                    TextStyle(
+                                                      fontSize: 15,
+                                                      fontFamily: 'Oswald',
+                                                      color: Color.fromARGB(255, 154, 220, 184),
+                                                    ),),
+
+
+                                              ],
+                                          ),
+                                        )
+
+
+
+                                      ],
+                                    )
+                                  ],
+                                ),
                               ),
-                              SizedBox(width : 35),
+
+
+                              SizedBox(width : 17),
+                              Image(image: AssetImage('assets/Vector_1.png')),
+                              SizedBox(width : 17),
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -153,7 +197,7 @@ class HomeState extends State<Home>{
                                   Row(
                                    children: [
                                      Container(
-                                       width: 208,
+                                       width: 240,
                                        child: Text(Events_list[index].name,
                                          softWrap: true,
                                          style:
@@ -168,7 +212,7 @@ class HomeState extends State<Home>{
                                   Row(
                                     children: [
                                       Container(
-                                        width: 208,
+                                        width: 240,
                                         child:
                                         Text(Events_list[index].short_description,
                                           softWrap: true,
@@ -206,7 +250,8 @@ class HomeState extends State<Home>{
                   //Text("Введите название события"),
                   TextField(
                     // obscureText: true,
-                    maxLength: 50,
+                    maxLength: 35,
+
                     decoration:
                     //Padding(padding: const EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),),
                     InputDecoration(
@@ -223,7 +268,7 @@ class HomeState extends State<Home>{
 
                   TextField(
                     // obscureText: true,
-                    maxLength: 120,
+                    maxLength: 85,
                     maxLines: 3,
                     decoration:
                     //Padding(padding: const EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),),
@@ -255,7 +300,7 @@ class HomeState extends State<Home>{
 
                   TextField(
                     // obscureText: true,
-                    maxLength: 25,
+                    maxLength: 20,
                     maxLines: 1,
                     decoration:
                     //Padding(padding: const EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),),
@@ -318,6 +363,7 @@ class HomeState extends State<Home>{
                           Events_list.last.place = e_place.trim();
                           Events_list.last.date = e_date.trim();
                           Events_list.last.time = e_time.trim();
+                          //Events_list.last.id = index;
                           not_first = true;
                           //if(not_first == true){
                             e_name = "";
@@ -380,7 +426,9 @@ class HomeState extends State<Home>{
           BottomNavigationBarItem(
             icon: Icon(Icons.map_outlined, color: Color.fromARGB(255, 16, 79, 58), size: 25,),
             label: 'Обзор',
+
           ),
+          //BottomNavigationBarItem(icon: Icon(Icons.plus_one_rounded, color: Color.fromARGB(255, 16, 79, 58), size: 25,),
           BottomNavigationBarItem(
             icon: Icon(Icons.person_2_outlined, color: Color.fromARGB(255, 16, 79, 58), size: 25,),
             label: 'Личный кабинет',
