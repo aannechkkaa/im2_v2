@@ -25,4 +25,12 @@ class UserModel {
   List<EventModel> eventsHosting = [];
 }
 
+class CreateUserModel {
+  CreateUserModel(this.email, this.password, this.name);
+
+  String email;
+  String password;
+  String? name;
+}
+
 enum Role {person, organization, admin}
