@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:im2/pages/home.dart';
+import 'package:comment_box/comment/comment.dart';
 
 class Comment{
   String autor_name = "";
@@ -11,13 +12,15 @@ class Comment{
 String comment_txt = "";
 List<Comment> Comment_list = [];
 
-class Event_page extends StatelessWidget {
+class Event_page extends StatefulWidget {
   const Event_page({Key? key}) : super(key: key);
 
+  @override
+  State<Event_page> createState() => _Event_pageState();
+}
 
+class _Event_pageState extends State<Event_page> {
   // void Current_event(String name,String short_description,String autor_name, String long_description,String place,String date,String time,){
-  //
-  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,6 +49,7 @@ class Event_page extends StatelessWidget {
       body:
         Column(
           children: [
+            SizedBox(height: 25),
               Row(
                 children: [
                   SizedBox(height: 25,),
@@ -215,7 +219,7 @@ class Event_page extends StatelessWidget {
                       "jxjxjxjxj xjxjxjx jxjxjxjxj"
                       ,
                     softWrap: true,
-                    maxLines: 3,
+                    maxLines: 5,
                     style:
                     TextStyle(
                       fontSize: 17,
@@ -297,7 +301,7 @@ class Event_page extends StatelessWidget {
               height: 20,
             ),
             SizedBox(
-              height: 330,
+              height: 320,
               width: 280,
               child:
               ListView.builder(
@@ -308,17 +312,124 @@ class Event_page extends StatelessWidget {
                   //   Container(
                       //color: Colors.lightGreenAccent,
                       //child:
-                      return Text(
-                        key: Key(Comment_list[index].comment),
-                        Comment_list[index].comment,
-                        softWrap: true,
-                        maxLines: 3,
-                        style:
-                        TextStyle(
-                          fontSize: 17,
-                          fontFamily: 'Oswald',
-                          color: Color.fromARGB(255, 16, 79, 58),
-                        ),);
+                      return Container(
+                        child:
+                            Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Align(
+                                          alignment: Alignment.topLeft,
+                                          child: CircleAvatar(
+                                            backgroundImage: AssetImage('assets/wom.jpeg'),
+                                            minRadius: 17.0,
+                                            maxRadius: 17.0,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      width: 15,
+                                    ),
+                                    Column(
+                                      children: [
+                                        Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+
+                                                key: Key(Comment_list[index].comment),
+                                                "Олег Иванов",
+                                                softWrap: true,
+                                                maxLines: 6,
+                                                style:
+                                                TextStyle(
+                                                  fontSize: 17,
+                                                  fontFamily: 'Oswald',
+                                                  color: Color.fromARGB(255, 16, 79, 58),
+                                                ),)]
+
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Column(
+                                      children: [
+
+                                        //padding: const EdgeInsets.only(bottom: ),
+                                        SizedBox(
+                                          width: 42,
+                                          height: 42,
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Column(
+                                      children: [
+                                        // Row(
+                                        //   children: [
+                                        //     Text(
+                                        //
+                                        //       key: Key(Comment_list[index].comment),
+                                        //       "5 МИНУТ НАЗАД",
+                                        //       softWrap: true,
+                                        //       maxLines: 6,
+                                        //       style:
+                                        //       TextStyle(
+                                        //         fontSize: 12,
+                                        //         fontFamily: 'Oswald',
+                                        //         color: Color.fromARGB(255, 247, 190, 59),
+                                        //       ),)
+                                        //   ],
+                                        // ),
+
+                                        Container(
+                                          width: 220,
+                                          child:
+                                          Row(
+                                            children: [
+
+                                              Flexible(child:
+
+                                              Text(
+
+                                                key: Key(Comment_list[index].comment),
+                                                Comment_list[index].comment,
+                                                softWrap: true,
+                                                maxLines: 6,
+                                                style:
+                                                TextStyle(
+                                                  fontSize: 15,
+                                                  fontFamily: 'Oswald',
+                                                  color: Color.fromARGB(255, 16, 79, 58),
+                                                ),))
+
+                                            ],
+                                          ),
+                                        )
+
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 15,
+                                )
+                              ],
+                            ),
+
+
+                      );
+
+
                   //   )
                   // );
                 }
@@ -330,12 +441,17 @@ class Event_page extends StatelessWidget {
                   width: 25,
                 ),
                 Column(
+                  // mainAxisAlignment: MainAxisAlignment.start,
+                  // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CircleAvatar(
-                      backgroundImage: AssetImage('assets/wom.jpeg'),
-                      minRadius: 17.0,
-                      maxRadius: 17.0,
-                    ),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: CircleAvatar(
+                        backgroundImage: AssetImage('assets/wom.jpeg'),
+                        minRadius: 17.0,
+                        maxRadius: 17.0,
+                      ),
+                    )
                   ],
                 ),
                 SizedBox(width: 10,),
@@ -369,11 +485,12 @@ class Event_page extends StatelessWidget {
                 Column(
                   children: [
                     IconButton(onPressed: (){
+                  setState(() {
                       Comment_list.add(Comment());
                       Comment_list.last.comment = comment_txt;
                       comment_txt = "";
                       print(Comment_list.length);
-                    },
+                    });},
                         icon: Icon(
                           color: Color.fromARGB(255, 247, 190, 59),
                           Icons.arrow_circle_right_rounded,

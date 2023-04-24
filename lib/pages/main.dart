@@ -11,7 +11,7 @@ void main() => runApp(
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-        '/': (context) => const Event_page(),
+        '/': (context) => const Home(),
         '/home': (context) => const Home(),
         '/event': (context) => const Event_page(),
       },
