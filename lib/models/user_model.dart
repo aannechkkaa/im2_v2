@@ -46,18 +46,18 @@ class UpdateUserModel {
 enum Role {person, organization, admin}
 
 Role roleFromString(String role) {
-    switch (role) {
-      case "PERSON": {
-        return Role.person;
-      }
-      case "ADMIN": {
-        return Role.admin;
-      }
-      case "ORGANIZATION": {
-        return Role.organization;
-      }
-      default: {
-        return Role.person;
-      }
+  switch (role) {
+    case "PERSON": {
+      return Role.person;
+    }
+    case "ADMIN": {
+      return Role.admin;
+    }
+    case "ORGANIZATION": {
+      return Role.organization;
+    }
+    default: {
+      return Role.person;
     }
   }
+}
