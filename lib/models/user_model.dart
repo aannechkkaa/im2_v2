@@ -13,6 +13,14 @@ class UserModel {
 
     final user = UserModel(id, email, name, role);
     user.image = data['image'] as String?;
+    if(data["eventParticipant"] != null) {
+      Iterable l = data["eventsParticipant"];
+      user.eventsParticipant = List<EventModel>.from(l.map((item) => EventModel.fromJson(item)));
+    }
+    if(data["eventsHosting"] != null) {
+      Iterable l = data["eventsHosting"];
+      user.eventsHosting = List<EventModel>.from(l.map((item) => EventModel.fromJson(item)));
+    }
 
     return user;
   }

@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+import 'package:im2/models/comments_model.dart';
 import 'package:im2/models/user_model.dart';
 
 class EventModel {
@@ -11,16 +13,24 @@ class EventModel {
   DateTime date;
   UserModel host;
   List<UserModel> participants = [];
+  List<CommentModel> comments = [];
 
   factory EventModel.fromJson(Map<String, dynamic> data) {
     final id = data["id"] as int;
     final name = data["name"] as String;
-    final status = data["status"] as Status;
-    final date = data["date"] as DateTime;
-    final host = data["host"] as UserModel;
+    final status = Status.values.byName((data["status"] as String).toLowerCase());
+    final date = DateTime.parse(data["date"] as String);
+    final host = UserModel.fromJson(data["host"]);
 
     final event = EventModel(id, name, status, date, host);
-    event.participants = data["participants"] as List<UserModel>;
+    if(data["participants"] != null) {
+      Iterable l = data["participants"];
+      event.participants = List<UserModel>.from(l.map((item) => UserModel.fromJson(item["user"])));
+    }
+    if(data["comments"] != null) {
+      Iterable l = data["comments"];
+      event.comments = List<CommentModel>.from(l.map((item) => CommentModel.fromJson(item["comment"])));
+    }
     event.description = data["description"] as String?;
     event.groupLink = data["groupLink"] as String?;
 
@@ -29,3 +39,7 @@ class EventModel {
 }
 
 enum Status {active, preparing, waiting, passed}
+
+extension StatusEx on Status {
+  String get name => describeEnum(this).toUpperCase();
+}
