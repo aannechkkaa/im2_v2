@@ -1,7 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
-import 'reg.dart';
 
+import 'dart:io';
+import 'package:im2/pages/add_event.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:im2/pages/home.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:im2/pages/reg.dart';
 class First_p extends StatefulWidget {
   const First_p({Key? key}) : super(key: key);
 
@@ -28,6 +33,24 @@ class Reg_route extends StatefulWidget{
 class Reg_route_state extends State<Reg_route>{
   @override
   bool? isCheked = false;
+
+
+  File? avatar;
+  Future pickImage() async{
+    try{
+      final avatar = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (avatar == null) return;
+
+      final imageTemporary = File(avatar.path);
+      setState(() => this.avatar = imageTemporary);
+    } on PlatformException catch(e){
+      print('Failed to pick nimage: $e');
+    }
+
+  }
+
+
+
   Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
@@ -44,7 +67,7 @@ class Reg_route_state extends State<Reg_route>{
 
       body: Column(
         children: [
-          SizedBox(height: 120,),
+          SizedBox(height: 30,),
           // Row(
           //   children: [
           //     Padding(

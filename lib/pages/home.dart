@@ -1,32 +1,12 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:im2/pages/account.dart';
 import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 import 'Event.dart';
+import 'package:im2/pages/add_event.dart';
 
-
-
-class Event{
-  String name = "";
-  String short_description = "";
-  String autor_name = "";
-  String long_description = "";
-  String place = "";
-  DateTime _eventdatetime = DateTime.now();
-  TimeOfDay _eventTime = TimeOfDay.now();
-  int id = 0;
-}
-
-DateTime now = DateTime.now();
-DateTime e_Datetime = DateTime.now();
-TimeOfDay e_dateTime = TimeOfDay.now();
-String e_name = "";
-String s_description = "";
-String l_description = "";
-String e_place = "";
-String e_date = "";
-String e_time = "";
 
 
 class Home extends StatefulWidget {
@@ -37,17 +17,17 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home>{
-  List<Event> Events_list = [];
+  //List<Event2> Events_list = [];
   //Event e1 = new Event();
   int Count = 0;
   int Current_index = 0;
   bool not_first = false;
   @override
-  void initState(){
-    super.initState();
-    Event e1 = Event();
-    // Events_list.addAll(['????? ? ?????', '???????? ?? ??????????', '??????? ? ????']);
-  }
+  // void initState(){
+  //   super.initState();
+  //   Event2 e1 = Event2();
+  //   // Events_list.addAll(['????? ? ?????', '???????? ?? ??????????', '??????? ? ????']);
+  // }
 
   Widget build(BuildContext context){
     return Scaffold(
@@ -77,7 +57,7 @@ class HomeState extends State<Home>{
       body:
 
       ListView.builder(
-          itemCount: Events_list.length,
+          itemCount: events_add_page.length,
           itemBuilder: (BuildContext context, int index){
             return ElevatedButton(
               style:
@@ -93,11 +73,12 @@ class HomeState extends State<Home>{
               onPressed: (){
                 //Navigator.pushNamed(context, '/event');
                 //Event_page() event_page = new Event_page();
+                Event_index = index;
                 Navigator.push(context, new MaterialPageRoute(
-                    builder: (context) => new Event_page(key: Key(Events_list[index].name),))
+                    builder: (context) => new Event_page())
                 );
               },
-              key: Key(Events_list[index].name),
+              key: Key(events_add_page[index].index.toString()),
               child: Container(
                 margin: const EdgeInsets.only(top: 10),
                 padding: const EdgeInsets.only(top: 15, left: 15),
@@ -123,7 +104,7 @@ class HomeState extends State<Home>{
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(width : 20),
-                            Text("FGB",
+                            Text(events_add_page[index].Date.day.toString() + "/" + events_add_page[index].Date.month.toString() + "/" + (events_add_page[index].Date.year.toInt() % 100).toString(),
 
                               style:
                               TextStyle(
@@ -132,7 +113,7 @@ class HomeState extends State<Home>{
                                 color: Colors.white,
                               ),),
 
-                            Text("SDFVB",
+                            Text(events_add_page[index].Time.toString()[10] + events_add_page[index].Time.toString()[11] + events_add_page[index].Time.toString()[12] + events_add_page[index].Time.toString()[13] + events_add_page[index].Time.toString()[14] ,
                               style:
                               TextStyle(
                                 fontSize: 21,
@@ -163,7 +144,7 @@ class HomeState extends State<Home>{
                                                 width: 40,
                                                 child:
                                                 Flexible(child:
-                                                Text(Events_list[index].place,
+                                                Text(events_add_page[index].place,
                                                   softWrap: true,
                                                   maxLines: 2,
 
@@ -239,7 +220,7 @@ class HomeState extends State<Home>{
                                 maxRadius: 20.0,
                               ),
                               SizedBox(width: 10,),
-                              Text("????, 28",
+                              Text("Олег, 28",
                                 style:
                                 TextStyle(
                                   fontSize: 18,
@@ -252,7 +233,7 @@ class HomeState extends State<Home>{
                             children: [
                               Container(
                                 width: 240,
-                                child: Text(Events_list[index].name,
+                                child: Text(events_add_page[index].name,
                                   softWrap: true,
                                   style:
                                   TextStyle(
@@ -268,7 +249,7 @@ class HomeState extends State<Home>{
                               Container(
                                 width: 240,
                                 child:
-                                Text(Events_list[index].short_description,
+                                Text(events_add_page[index].shortDescription,
                                   softWrap: true,
                                   style:
                                   TextStyle(
@@ -291,283 +272,17 @@ class HomeState extends State<Home>{
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color.fromARGB(255, 16, 79, 58),
         onPressed: () {
-          showDialog(context: context, builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('???????? ???????',
-                style:
-                TextStyle(
-                  fontSize: 30,
-                  fontFamily: 'Oswald',
-                  color: Colors.black,
-                ),),
-
-              actions: [
-                //Text("??????? ???????? ???????"),
-                TextField(
-                  // obscureText: true,
-                  maxLength: 35,
-
-                  decoration:
-                  //Padding(padding: const EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),),
-                  InputDecoration(
-                    labelText: '???????? ???????',
-                    labelStyle: TextStyle(fontSize: 17, color: Colors.blueGrey, fontFamily: 'Oswald'),
-                    contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
-                  ),
-                  onChanged:  (String n_value) {
-                    e_name = n_value;
-                  },
-                ),
-
-
-
-                TextField(
-                  // obscureText: true,
-                  maxLength: 85,
-                  maxLines: 3,
-                  decoration:
-                  //Padding(padding: const EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),),
-                  InputDecoration(
-                    labelText: '??????? ????????',
-                    labelStyle: TextStyle(fontSize: 17, color: Colors.blueGrey, fontFamily: 'Oswald'),
-                    contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
-                  ),
-                  onChanged: (String s_des) {
-                    s_description = s_des;
-                  },
-                ),
-
-                TextField(
-                  // obscureText: true,
-                  maxLength: 180,
-                  maxLines: 3,
-                  decoration:
-                  //Padding(padding: const EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),),
-                  InputDecoration(
-                    labelText: '????????? ????????',
-                    labelStyle: TextStyle(fontSize: 17, color: Colors.blueGrey, fontFamily: 'Oswald'),
-                    contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
-                  ),
-                  onChanged: (String l_des) {
-                    l_description = l_des;
-                  },
-                ),
-
-                TextField(
-                  // obscureText: true,
-                  maxLength: 20,
-                  maxLines: 1,
-                  decoration:
-                  //Padding(padding: const EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),),
-                  InputDecoration(
-                    labelText: '?????',
-                    labelStyle: TextStyle(fontSize: 17, color: Colors.blueGrey, fontFamily: 'Oswald'),
-                    contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
-                  ),
-                  onChanged: (String place) {
-                    e_place = place;
-                  },
-                ),
-                Row(
-                  children: [
-                    Column(
-                      children: [
-                        SizedBox(
-                          width: 7,
-                        )
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        TextButton(onPressed:
-                            (){
-                          showDatePicker(context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime.now(),
-                              lastDate: DateTime(2024)).then((value) {
-                            setState(() {
-                              e_Datetime = value!;
-                            });
-                          });
-                        },
-
-
-
-                          child: Text('??????? ????' + "     ", style:
-
-                          TextStyle(
-                            fontSize: 18,
-                            color: Colors.blueGrey,
-                            fontFamily: 'Oswald',
-                          ),
-                          ),
-                          style: ButtonStyle(
-                            shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
-                            )),
-                            backgroundColor: MaterialStateProperty.all(Colors.white,),
-                            //minimumSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width-5,10))
-                          ),),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        SizedBox(width: 25,)
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          e_Datetime.day.toString() + "/" + e_Datetime.month.toString() + "/" + e_Datetime.year.toString(),
-                          style: TextStyle(fontSize: 17, color: Colors.black, fontFamily: 'Oswald'),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-
-
-                Row(
-                  children: [
-                    Column(
-                      children: [
-                        SizedBox(
-                          width: 7,
-                        )
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        TextButton(onPressed:
-                            (){
-                          showTimePicker(context: context,
-                              initialTime: TimeOfDay.now());
-
-                        },
-
-
-
-                          child: Text('??????? ?????' + "     ", style:
-
-                          TextStyle(
-                            fontSize: 18,
-                            color: Colors.blueGrey,
-                            fontFamily: 'Oswald',
-                          ),
-                          ),
-                          style: ButtonStyle(
-                            shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
-                            )),
-                            backgroundColor: MaterialStateProperty.all(Colors.white,),
-                            //minimumSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width-5,10))
-                          ),),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        SizedBox(width: 25,)
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          e_dateTime.hour.toString() + ":" + e_dateTime.minute.toString(),
-                          style: TextStyle(fontSize: 17, color: Colors.black, fontFamily: 'Oswald'),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-
-
-
-                TextField(
-                  // obscureText: true,
-                  maxLength: 8,
-                  maxLines: 1,
-                  decoration:
-                  //Padding(padding: const EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),),
-                  InputDecoration(
-                    labelText: '???? ? ?????',
-                    labelStyle: TextStyle(fontSize: 17, color: Colors.blueGrey, fontFamily: 'Oswald'),
-                    contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
-                  ),
-                  onChanged: (String date) {
-                    e_date = date;
-                  },
-                ),
-
-                TextField(
-                  // obscureText: true,
-                  maxLength: 5,
-                  maxLines: 1,
-                  decoration:
-                  //Padding(padding: const EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),),
-                  InputDecoration(
-                    labelText: '?????',
-                    labelStyle: TextStyle(fontSize: 17, color: Colors.blueGrey, fontFamily: 'Oswald'),
-                    contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
-                  ),
-                  onChanged: (String time) {
-                    e_time = time;
-                  },
-                ),
-
-
-
-                TextButton(
-                  onPressed: () {
-                    setState(() {
-                      //bool fool = true;
-                      if(!((e_name.length > 0)&&(s_description.length > 0)&&(l_description.length > 0)&&(e_place.length > 0)&&(e_date.length > 0)&&(e_time.length > 0))){
-                        print("??????? ?? ?????????!!");
-                      }
-                      else {
-                        Events_list.add(Event());
-                        Events_list.last.name = e_name.trim();
-                        Events_list.last.short_description = s_description.trim();
-                        Events_list.last.long_description = l_description.trim();
-                        Events_list.last.place = e_place.trim();
-                        // Events_list.last.date = e_date.trim();
-                        // Events_list.last.time = e_time.trim();
-
-                        //Events_list.last.id = index;
-                        not_first = true;
-                        //if(not_first == true){
-                        e_name = "";
-                        s_description = "";
-                        l_description = "";
-                        e_place = "";
-                        e_date = "";
-                        e_time = "";
-                        //}
-                      }
-                    });
-                  },
-
-                  child: Text('???????? ???????', style:
-                  TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
-                    fontFamily: 'Oswald',
-                  ),
-                  ),
-                  style: ButtonStyle(
-                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      )),
-                      backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 16, 79, 58),),
-                      minimumSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width-20,40))
-                  ),
-                )
-              ],
-            );
-          });
+          Navigator.push(context, PageTransition(
+              type: PageTransitionType.fade,
+              // duration: Duration.millisecondsPerSecond(),
+              alignment: Alignment.center,
+              child: add_event()));
         },
-        child: Icon(
-          Icons.add,
-          size: 25,
+        child: SvgPicture.asset(
+          'assets/add_icon_white.svg',
+          // Укажите размер изображения
+          width: 30,
+          height: 30,
         ),
       ),
       bottomNavigationBar:BottomAppBar(

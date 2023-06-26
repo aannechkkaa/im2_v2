@@ -1,4 +1,4 @@
-import 'package:im2/models/event_model.dart';
+ import 'package:im2/models/event_model.dart';
 import 'package:im2/models/user_model.dart';
 
 class CommentModel {
