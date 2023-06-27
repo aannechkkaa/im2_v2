@@ -16,8 +16,8 @@ class CommentModel {
     final id = data["id"] as int;
     final content = data["content"] as String;
     final reactions = data["reactions"] as int;
-    final createdAt = data["createdAt"] as DateTime;
-    final updatedAt = data["updatedAt"] as DateTime;
+    final createdAt = DateTime.parse(data["createdAt"] as String);
+    final updatedAt = DateTime.parse(data["updatedAt"] as String);
 
     final comment = CommentModel(id,content, createdAt, updatedAt);
     comment.reactions = reactions;

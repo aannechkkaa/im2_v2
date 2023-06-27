@@ -14,14 +14,14 @@ class EventApiService {
 
   Future<EventModel> getEvent(int id) async {
     final queryParams = {
-      'id': id
+      'id': id.toString()
     };
     final uri = Uri.http(APIUrl, endpoint, queryParams);
     final response = await http.get(uri, headers: {
       HttpHeaders.contentTypeHeader: 'application/json',
       HttpHeaders.authorizationHeader: 'Bearer $JwtToken',
     });
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       final data = jsonDecode(response.body);
       return EventModel.fromJson(data);
     }
@@ -108,7 +108,7 @@ class EventApiService {
 
   Future closeEvent(int id) async {
     final queryParams = {
-      'id': id,
+      'id': id.toString(),
     };
     final uri = Uri.http(APIUrl, '$endpoint/close', queryParams);
     final response = await http.post(uri, headers: {
@@ -116,9 +116,8 @@ class EventApiService {
       HttpHeaders.authorizationHeader: 'Bearer $JwtToken'
     });
 
-    if (response.statusCode == 200) {
-      final result = jsonDecode(response.body);
-      if (result == 'ok') {
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      if (response.body == 'ok') {
         return;
       }
     }

@@ -29,7 +29,7 @@ class EventModel {
     }
     if(data["comments"] != null) {
       Iterable l = data["comments"];
-      event.comments = List<CommentModel>.from(l.map((item) => CommentModel.fromJson(item["comment"])));
+      event.comments = List<CommentModel>.from(l.map((item) => CommentModel.fromJson(item)));
     }
     event.description = data["description"] as String?;
     event.groupLink = data["groupLink"] as String?;

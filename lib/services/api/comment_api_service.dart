@@ -13,14 +13,17 @@ class CommentApiService {
 
   Future<CommentModel> createComment(int eventId, String content) async {
     final queryParams = {
-      'eventId': eventId
+      'eventId': eventId.toString()
+    };
+    final Map<String, dynamic> data = {
+      "content": content,
     };
     final uri = Uri.http(APIUrl, endpoint, queryParams);
     final response = await http.post(uri, headers: {
       HttpHeaders.contentTypeHeader: 'application/json',
       HttpHeaders.authorizationHeader: 'Bearer $JwtToken',
-    });
-    if (response.statusCode == 200) {
+    }, body: jsonEncode(data));
+    if (response.statusCode == 201) {
       final data = jsonDecode(response.body);
       return CommentModel.fromJson(data);
     }
@@ -29,7 +32,7 @@ class CommentApiService {
 
   Future deleteComment(int id) async {
     final queryParams = {
-      'id': id,
+      'id': id.toString(),
     };
     final uri = Uri.http(APIUrl, endpoint, queryParams);
     final response = await http.delete(uri, headers: {
