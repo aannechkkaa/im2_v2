@@ -1,20 +1,32 @@
 
 import 'package:flutter/material.dart';
+import 'package:im2/pages/hello_page.dart';
 import 'package:im2/pages/home.dart';
 import 'package:im2/pages/first_page.dart';
 import 'package:im2/pages/Event.dart';
 import 'package:im2/pages/account.dart';
+import 'package:provider/provider.dart';
+
+import 'package:im2/pages/Users.dart';
+
+
+List<User> users = [];
+
 
 void main() => runApp(
-    MaterialApp(
+  ChangeNotifierProvider(
+    create: (context) => User(),
+    child: MaterialApp(
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-        '/': (context) => const Home(),
+        '/': (context) => const hello_page(),
         '/home': (context) => const Home(),
         '/event': (context) => const Event_page(),
       },
       theme: ThemeData(
-      primaryColor: Colors.cyan
+          primaryColor: Colors.cyan
+      ),
+    ),
   ),
-));
+);

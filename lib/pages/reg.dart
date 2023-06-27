@@ -1,9 +1,16 @@
-import 'package:flutter/material.dart';
-import 'home.dart';
-import 'package:intl/intl.dart';
-import 'package:intl/date_symbol_data_local.dart';
-//import 'package:email_validator/email_validator.dart';
 
+import 'dart:io';
+import 'package:im2/pages/add_event.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:im2/pages/home.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:page_transition/page_transition.dart';
+
+
+
+bool _isObscured = true;
+bool _isObscured2 = true;
 
 class Reg_p extends StatefulWidget {
   const Reg_p({Key? key}) : super(key: key);
@@ -13,6 +20,9 @@ class Reg_p extends StatefulWidget {
 }
 
 class Reg_page extends State<Reg_p> {
+
+
+
 
   TextEditingController date = TextEditingController();
   @override
@@ -33,6 +43,22 @@ class Home_route extends StatefulWidget{
 }
 
 class Home_route_state extends State<Home_route>{
+
+
+  File? avatar;
+  Future pickImage() async{
+    try{
+      final avatar = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (avatar == null) return;
+
+      final imageTemporary = File(avatar.path);
+      setState(() => this.avatar = imageTemporary);
+    } on PlatformException catch(e){
+      print('Failed to pick nimage: $e');
+    }
+
+  }
+
   @override
   bool? isCheked = false;
   Widget build(BuildContext context){
@@ -60,7 +86,61 @@ class Home_route_state extends State<Home_route>{
         body: SafeArea(child:
         Column(
           children: [
-            SizedBox(height: 120,),
+            SizedBox( height: 20,),
+
+
+        Stack(
+        children: <Widget>[
+
+
+
+        Center(
+
+        child:
+        avatar != null
+        ? Image.file(
+          avatar!,
+          width: 160,
+          height: 160,
+          fit: BoxFit.cover,
+        )
+                : CircleAvatar(
+            backgroundImage: AssetImage('assets/wom.jpeg'),
+      minRadius: 50,
+      maxRadius: 90,
+    ),
+
+    ),
+    Center(
+    child:
+    Padding(padding: EdgeInsets.fromLTRB(165, 20, 0, 0),
+    child:
+
+    CircleAvatar(
+    radius: 20,
+    backgroundColor: Color.fromARGB(255, 247, 183, 59),
+    child: IconButton(onPressed: (){
+
+    pickImage();
+    },
+
+    color: Colors.white,
+    icon: Icon(Icons.camera_alt_outlined),
+    iconSize: 20,
+    ),
+    ),
+
+
+    ),
+    ),
+
+
+    ]),
+
+
+
+
+            SizedBox(height: 30,),
             Card(
               child: TextField(
                 obscureText: true,
@@ -76,60 +156,62 @@ class Home_route_state extends State<Home_route>{
 
             SizedBox(height: 10,),
 
-            Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
-                ),
-                Text('Пол', style:
-                TextStyle(
-                  fontSize: 15,
-                  fontFamily: 'Oswald',
-                )),
-                SizedBox(width: 30,),
-                Checkbox(
-                    value: isCheked,
-                    tristate: true,
-                    activeColor: Colors.green,
-                    onChanged: (now_checked){
-                      setState((){
-                        isCheked = true;
-                      });
-                    }),
-                SizedBox(width: 5,),
-                Text('Мужской', style:
-                TextStyle(
-                  fontSize: 15,
-                  fontFamily: 'Oswald',
-                )
-                ),
-                SizedBox(width: 20,),
-                Checkbox(
-                    value: isCheked,
-                    tristate: true,
-                    activeColor: Colors.green,
-                    onChanged: (now_checked){
-                      setState((){
-                        isCheked = true;
-                      });
-                    }),
-                SizedBox(width: 5,),
-                Text('Женский', style:
-                TextStyle(
-                  fontSize: 15,
-                  fontFamily: 'Oswald',
-                )
-                ),
-              ],
-            ),
+            // Row(
+            //   children: [
+            //     Padding(
+            //       padding: const EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
+            //     ),
+            //     Text('Пол', style:
+            //     TextStyle(
+            //       fontSize: 15,
+            //       fontFamily: 'Oswald',
+            //     )),
+            //     SizedBox(width: 30,),
+            //     Checkbox(
+            //         value: isCheked,
+            //         tristate: true,
+            //         activeColor: Colors.green,
+            //         onChanged: (now_checked){
+            //           setState((){
+            //             isCheked = true;
+            //           });
+            //         }),
+            //     SizedBox(width: 5,),
+            //     Text('Мужской', style:
+            //     TextStyle(
+            //       fontSize: 15,
+            //       fontFamily: 'Oswald',
+            //     )
+            //     ),
+            //     SizedBox(width: 20,),
+            //     Checkbox(
+            //         value: isCheked,
+            //         tristate: true,
+            //         activeColor: Colors.green,
+            //         onChanged: (now_checked){
+            //           setState((){
+            //             isCheked = true;
+            //           });
+            //         }),
+            //     SizedBox(width: 5,),
+            //     Text('Женский', style:
+            //     TextStyle(
+            //       fontSize: 15,
+            //       fontFamily: 'Oswald',
+            //     )
+            //     ),
+            //   ],
+            // ),
 
             SizedBox(height: 10,),
             Card(
               child: TextField(
                 //controller: date,
                 decoration:
+
                 //Padding(padding: const EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),),
                 const InputDecoration(
+
                   labelText: 'Дата рождения',
                   labelStyle: TextStyle(fontSize: 17, color: Colors.blueGrey, fontFamily: 'Oswald'),
                   contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),),
@@ -147,6 +229,7 @@ class Home_route_state extends State<Home_route>{
 
             Card(
               child: TextField(
+                keyboardType: TextInputType.emailAddress,
                 // obscureText: true,
                 decoration:
                 //Padding(padding: const EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),),
@@ -162,10 +245,20 @@ class Home_route_state extends State<Home_route>{
 
             Card(
               child: TextField(
-                obscureText: true,
+                obscureText: _isObscured,
                 decoration:
                 //Padding(padding: const EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),),
                 InputDecoration(
+
+                  suffix: IconButton(
+                    icon: Icon(_isObscured ? Icons.visibility_off : Icons.visibility),
+                    onPressed: () {
+                      setState(() {
+                        _isObscured = !_isObscured;
+                      });
+                    },
+                  ),
+
                   labelText: 'Пароль',
                   labelStyle: TextStyle(fontSize: 17, color: Colors.blueGrey, fontFamily: 'Oswald'),
                   contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
@@ -177,10 +270,20 @@ class Home_route_state extends State<Home_route>{
 
             Card(
               child: TextField(
-                obscureText: true,
+                obscureText: _isObscured2,
                 decoration:
                 //Padding(padding: const EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),),
                 InputDecoration(
+
+                  suffix: IconButton(
+                    icon: Icon(_isObscured2 ? Icons.visibility_off : Icons.visibility),
+                    onPressed: () {
+                      setState(() {
+                        _isObscured2 = !_isObscured2;
+                      });
+                    },
+                  ),
+
                   labelText: 'Подтверждение пароля',
                   labelStyle: TextStyle(fontSize: 17, color: Colors.blueGrey, fontFamily: 'Oswald'),
                   contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),

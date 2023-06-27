@@ -1,15 +1,22 @@
+import 'dart:html';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:im2/pages/Comment.dart';
+import 'package:im2/pages/add_event.dart';
+import 'package:im2/pages/MyWidgets/Zoomable_widget.dart';
+
+import 'package:im2/pages/MyWidgets/Event_pics_builder.dart';
 import 'package:im2/pages/home.dart';
 
 
-class Comment{
-  String autor_name = "";
-  String autor_age = "";
-  String comment = "";
-  //String autor_photo = "";
-}
+
+// class Comment{
+//   String autor_name = "";
+//   String autor_age = "";
+//   String comment = "";
+//   //String autor_photo = "";
+// }
 class Event_members{
   String name = "Антон";
   int age = 45;
@@ -18,6 +25,10 @@ String u_r_member = "Хочу пойти";
 String comment_txt = "";
 List<Comment> Comment_list = [];
 List<Event_members> Members_list = [];
+TextEditingController _controller = TextEditingController();
+
+final String imagePath = 'assets/wom.jpeg';
+bool _isZoomed = false;
 
 class Event_page extends StatefulWidget {
   const Event_page({Key? key}) : super(key: key);
@@ -54,6 +65,9 @@ class _Event_pageState extends State<Event_page> {
 
 
       body:
+          ListView(
+            children: [
+
         Column(
           children: [
             Container(
@@ -133,7 +147,7 @@ class _Event_pageState extends State<Event_page> {
                                                 //Icons.border_color_outlined
                                                   Icons.place_outlined,
                                                   color: Color.fromARGB(255, 247, 190, 59)),
-                                              Text("МестоМестоМестоМесто",
+                                              Text(events_add_page[Event_index].place,
                                                 softWrap: true,
                                                 maxLines: 2,
 
@@ -159,7 +173,7 @@ class _Event_pageState extends State<Event_page> {
                                             child:
                                             Column(
                                               children: [
-                                                Text("17:00",
+                                                Text(events_add_page[Event_index].Time.toString()[10] + events_add_page[Event_index].Time.toString()[11] + events_add_page[Event_index].Time.toString()[12] + events_add_page[Event_index].Time.toString()[13] + events_add_page[Event_index].Time.toString()[14],
                                                   softWrap: true,
                                                   maxLines: 2,
 
@@ -183,7 +197,7 @@ class _Event_pageState extends State<Event_page> {
                                                 mainAxisAlignment: MainAxisAlignment.end,
 
                                                 children: [
-                                                  Text("11 Марта",
+                                                  Text(events_add_page[Event_index].Date.day.toString() + "/" + events_add_page[Event_index].Date.month.toString() + "/" + (events_add_page[Event_index].Date.year.toInt() % 100).toString(),
                                                     softWrap: true,
                                                     maxLines: 2,
 
@@ -230,7 +244,7 @@ class _Event_pageState extends State<Event_page> {
             Row(
               children: [
                 SizedBox(width: 25,),
-                Text("Хочу пойти в Мариинский театр",
+                Text(events_add_page[Event_index].shortDescription,
                   style:
                   TextStyle(
                     fontSize: 20,
@@ -241,12 +255,11 @@ class _Event_pageState extends State<Event_page> {
             ),
 
               Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SizedBox(width: 25,),
                 Flexible(
-                  child:Text("Хочу пойти в Мариинский театр лялялялялял ялялялялялялял ялляляляляляляля ляя ляляляля щящящящ лялялял "
-                      "jxjxjxjxj xjxjxjx jxjxjxjxj"
+                  child:Text(events_add_page[Event_index].longDescription
                       ,
                     softWrap: true,
                     maxLines: 5,
@@ -254,7 +267,7 @@ class _Event_pageState extends State<Event_page> {
                     TextStyle(
                       fontSize: 17,
                       fontFamily: 'Oswald',
-                      color: Color.fromARGB(255, 16, 79, 58),
+                      color: Colors.blueGrey,
                     ),),
                 ),
                 SizedBox(width: 25,),
@@ -263,8 +276,52 @@ class _Event_pageState extends State<Event_page> {
               ]
               ),
             SizedBox(
-              height: 50,
+              height: 25,
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                //SizedBox(width: 25,),
+
+
+
+                //ZoomableImage(imageUrl: 'assets/test_photo_1.jpg'),
+                SizedBox(width: 30,),
+
+                event_pics_builder(
+                  context,
+                  events_add_page[Event_index].picURL1,
+                ),
+                SizedBox(width: 30,),
+                event_pics_builder(
+                  context,
+                  events_add_page[Event_index].picURL2,
+                ),
+
+
+                //event_pics_builder(events_add_page[Event_index].picURL1)
+
+
+
+                //ZoomableImage(imageUrl: 'assets/test_photo_2.jpg'),
+
+              ],
+            ),
+            SizedBox(height: 20,),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             Container(
             //  decoration: new BoxDecoration(
             //   border: Border.all(
@@ -636,14 +693,14 @@ class _Event_pageState extends State<Event_page> {
               width: 280,
               child:
               ListView.builder(
-                itemCount: Comment_list.length,
+                itemCount: events_add_page[Event_index].comments.length,
                 itemBuilder: (BuildContext context, int index){
                   // return Flexible(
                   //   child:
                   //   Container(
                       //color: Colors.lightGreenAccent,
                       //child:
-                  if (Comment_list.length < 1){
+                  if (events_add_page[Event_index].comments.length < 1){
                     return Text(
                       "Оставьте свой комментарий!"
                     );
@@ -677,12 +734,12 @@ class _Event_pageState extends State<Event_page> {
                                       mainAxisAlignment: MainAxisAlignment
                                           .start,
                                       crossAxisAlignment: CrossAxisAlignment
-                                          .start,
+                                          .end,
                                       children: [
                                         Text(
 
-                                          key: Key(Comment_list[index].comment),
-                                          "Олег Иванов",
+                                          //key: Key(Comment_list[index].comment),
+                                          events_add_page[Event_index].comments[index].commentAuthorName.toString() + "  ",
                                           softWrap: true,
                                           maxLines: 6,
                                           style:
@@ -691,7 +748,33 @@ class _Event_pageState extends State<Event_page> {
                                             fontFamily: 'Oswald',
                                             color: Color.fromARGB(
                                                 255, 16, 79, 58),
-                                          ),)
+                                          ),),
+                                        Text(
+
+                                          //key: Key(Comment_list[index].comment),
+                                          events_add_page[Event_index].comments[index].commentDate.day.toString() + "/" + events_add_page[Event_index].comments[index].commentDate.month.toString() ,
+                                          softWrap: true,
+                                          maxLines: 6,
+                                          style:
+                                          TextStyle(
+                                            fontSize: 15,
+                                            //ontFamily: 'Oswald',
+                                            color: Colors.blueGrey
+                                          ),),
+                                        Text(
+
+                                          //key: Key(Comment_list[index].comment),
+                                          //events_add_page[Event_index].comments[index].commentTime.toString(),
+                                          " " + events_add_page[Event_index].comments[index].commentTime.toString()[10] + events_add_page[Event_index].comments[index].commentTime.toString()[11] + events_add_page[Event_index].comments[index].commentTime.toString()[12] + events_add_page[Event_index].comments[index].commentTime.toString()[13] + events_add_page[Event_index].comments[index].commentTime.toString()[14],
+                                          softWrap: true,
+                                          maxLines: 6,
+                                          style:
+                                          TextStyle(
+                                            fontSize: 15,
+                                            // fontFamily: 'Oswald',
+                                            color: Colors.blueGrey,
+                                          ),),
+
                                       ]
 
                                   ),
@@ -743,8 +826,8 @@ class _Event_pageState extends State<Event_page> {
 
                                         Text(
 
-                                          key: Key(Comment_list[index].comment),
-                                          Comment_list[index].comment,
+                                          //key: Key(Comment_list[index].comment),
+                                          events_add_page[Event_index].comments[index].commentText,
                                           softWrap: true,
                                           maxLines: 6,
                                           style:
@@ -783,6 +866,8 @@ class _Event_pageState extends State<Event_page> {
           ]
 
         ),
+            ],
+          ),
         bottomNavigationBar:BottomAppBar(
         shape: const CircularNotchedRectangle(),
     color: Colors.white,
@@ -822,6 +907,7 @@ class _Event_pageState extends State<Event_page> {
               child:
               TextField(
                 // obscureText: true,
+                controller: _controller,
                 maxLength: 160,
                 maxLines: 1,
                 decoration:
@@ -845,12 +931,24 @@ class _Event_pageState extends State<Event_page> {
         Column(
           children: [
             IconButton(onPressed: (){
-              setState(() {
-                Comment_list.add(Comment());
-                Comment_list.last.comment = comment_txt;
-                comment_txt = "";
-                print(Comment_list.length);
-              });},
+              if((comment_txt == "")||(comment_txt.trim().isEmpty)){
+                _controller.clear();
+              }
+              else{
+                setState(() {
+                  _controller.clear();
+                  events_add_page[Event_index].comments.add(Comment_class(
+                    commentText: comment_txt.trim(),
+                    commentId: events_add_page[Event_index].comments.length,
+                    commentAuthorName: 'Олег',
+                    commentDate: DateTime.now(),
+                    commentTime: TimeOfDay.now(),
+                  ));
+                  comment_txt = "";
+                  //print(Comment_list.length);
+                });
+              }
+              },
                 icon: Icon(
                   color: Color.fromARGB(255, 247, 190, 59),
                   Icons.arrow_circle_right_rounded,
