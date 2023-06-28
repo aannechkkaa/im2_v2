@@ -2,15 +2,25 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:im2/models/user_model.dart';
+import 'package:im2/services/api/comment_api_service.dart';
+import 'package:im2/services/api/event_api_service.dart';
+import 'package:im2/services/api/user_api_service.dart';
 
 class ApiService {
   static String APIUrl = 'http://10.0.2.2:3000';
   static String authEndpoint = '/auth';
-  String? jwt;
+  
+  late CommentApiService commentApi;
+  late UserApiService userApi;
+  late EventApiService eventApi;
 
-  ApiService([this.jwt]);
-
-  Future<String> logIn(String email, String password) async {
+  ApiService(String token) {
+    commentApi = CommentApiService(APIUrl, token);
+    userApi = UserApiService(APIUrl, token);
+    eventApi = EventApiService(APIUrl, token);
+  }
+  
+  static Future<String> logIn(String email, String password) async {
     final url = Uri.parse('$APIUrl$authEndpoint/login');
     final Map<String, dynamic> data = {
       'email' : email,
@@ -29,11 +39,7 @@ class ApiService {
     throw Error();
   }
 
-  setToken(String token) {
-    jwt = token;
-  }
-
-  Future<UserModel> register(String email, String password, String? name) async {
+  static Future<UserModel> register(String email, String password, String? name) async {
     final url = Uri.parse('$APIUrl$authEndpoint/register');
     final Map<String, dynamic> data = {
       'email': email,
