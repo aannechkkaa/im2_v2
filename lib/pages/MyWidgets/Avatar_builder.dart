@@ -4,13 +4,18 @@ import 'package:flutter/material.dart';
 
 Widget buildAvatar(String? avatarURL) {
   if (avatarURL == null) {
-    return CircleAvatar(
-      child: Image.network(
-        'https://sbcf.fr/wp-content/uploads/2018/03/sbcf-default-avatar.png',
+    return ClipOval(
+      child: Image.asset(
+        '../assets/default_avatar.jpeg',
         width: 150,
         height: 150,
         fit: BoxFit.cover,
       ),
+    // );CircleAvatar(
+    //   radius: 75, // half of the desired width and height of the default image
+    //     backgroundImage: AssetImage('../assets/default_avatar.jpeg',
+    //     ),
+
     ); // or any other default widget to show when the URL is null
   }
   return ClipOval(

@@ -4,10 +4,12 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_svg/svg.dart';
 import 'package:im2/pages/add_event.dart';
+import 'package:im2/pages/Users.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:im2/pages/MyWidgets/Avatar_builder.dart';
 import 'package:im2/pages/home.dart';
+import 'package:im2/pages/edit_profile.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:file_picker/file_picker.dart';
@@ -54,11 +56,11 @@ class Reg_page extends State<Reg_p> {
 
 
 
-  String userName = "Олег Иванов";
-  int userAge = 28;
+  String userName = Users.last.username;
+  int userAge = Users.last.age;
   int user_raiting = 5;
   String user_description = "Я Андрей люблю друзей, театры, кино вытсавки, учусь в ДВФУ по направлению прикладная информатика";
-
+  String? User_avatar_url = Users.last.avatarUrl;
   TextEditingController date = TextEditingController();
 
   @override
@@ -70,20 +72,29 @@ class Reg_page extends State<Reg_p> {
         appBar: AppBar(
           actions: [
             IconButton(
-              onPressed: () {}, icon: Icon(Icons.settings), iconSize: 35,)
-          ],
-          leading: Padding(padding: EdgeInsets.only(
-              left: 12.0, top: 7.0, bottom: 7.0),
-            child:
-            CircleAvatar(
-              backgroundImage: AssetImage('assets/wom.jpeg'),
+              onPressed: () {
+                  // Navigator.push(context, PageTransition(
+                  //     type: PageTransitionType.fade,
+                  //     child: Edit_p()));
 
-              radius: 10,
-            ),
-          ),
+
+              }, icon: Icon(Icons.settings), iconSize: 35,)
+          ],
+          // leading: Padding(padding: EdgeInsets.only(
+          //     left: 12.0, top: 7.0, bottom: 7.0),
+          //   child:
+          //   ClipOval(
+          //     child: Image.network(
+          //       Users.last.avatarUrl!,
+          //       width: 20,
+          //       height: 20,
+          //       fit: BoxFit.cover,
+          //     ),
+          //   )
+          // ),
           automaticallyImplyLeading: false,
           backgroundColor: Color.fromARGB(255, 16, 79, 58),
-          title: Text('?????? ???????', style:
+          title: Text('Профиль', style:
           TextStyle(
             fontSize: 30,
             fontFamily: 'Oswald',
@@ -112,34 +123,34 @@ class Reg_page extends State<Reg_p> {
 
                                   child:
                                   Container(
-                                    child: buildAvatar(avatarUrl),
+                                    child: buildAvatar(User_avatar_url),
                                     //padding: EdgeInsets.all(8),
                                   )
 
 
                                 ),
-                                Center(
-                                  child:
-                                  Padding(padding: EdgeInsets.fromLTRB(165, 20, 0, 0),
-                                    child:
-
-                                    CircleAvatar(
-                                      radius: 20,
-                                      backgroundColor: Color.fromARGB(255, 247, 183, 59),
-                                      child: IconButton(onPressed: (){
-
-                                        pickImage();
-                                      },
-
-                                        color: Colors.white,
-                                        icon: Icon(Icons.camera_alt_outlined),
-                                        iconSize: 20,
-                                      ),
-                                    ),
-
-
-                                  ),
-                                ),
+                                // Center(
+                                //   child:
+                                //   Padding(padding: EdgeInsets.fromLTRB(165, 20, 0, 0),
+                                //     child:
+                                //
+                                //     CircleAvatar(
+                                //       radius: 20,
+                                //       backgroundColor: Color.fromARGB(255, 247, 183, 59),
+                                //       child: IconButton(onPressed: (){
+                                //
+                                //         pickImage();
+                                //       },
+                                //
+                                //         color: Colors.white,
+                                //         icon: Icon(Icons.camera_alt_outlined),
+                                //         iconSize: 20,
+                                //       ),
+                                //     ),
+                                //
+                                //
+                                //   ),
+                                // ),
 
 
                               ]),
@@ -149,7 +160,7 @@ class Reg_page extends State<Reg_p> {
                     ),
 
                     Text(
-                      userName + ", " + userAge.toString(),
+                      Users.last.username + ", " + userAge.toString(),
                       style: TextStyle(
                         fontSize: 25,
                         fontFamily: 'Oswald',
@@ -230,7 +241,7 @@ class Reg_page extends State<Reg_p> {
                           padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
                           child:
                           Text(
-                            user_description,
+                            Users.last.profile_description,
                             style: TextStyle(
                               fontSize: 17,
                               fontFamily: 'Oswald',
@@ -352,18 +363,15 @@ class Reg_page extends State<Reg_p> {
                         Column(
                           children: [
 
-                            IconButton(onPressed: (() {
-                              //Navigator.push(context, PageTransition(type: PageTransitionType.fade, child: Reg_p()));
-                            }),
+                            IconButton(
+                              onPressed: (() {
+                                //Navigator.push(context, PageTransition(type: PageTransitionType.fade, child: Reg_p()));
+                              }),
                               icon: Container(
                                 width: 150.0,
                                 height: 150.0,
                                 decoration: BoxDecoration(
                                   color: const Color(0xff7c94b6),
-                                  image: DecorationImage(
-                                    image: AssetImage('assets/wom.jpeg'),
-                                    fit: BoxFit.cover,
-                                  ),
                                   borderRadius: BorderRadius.all(
                                       Radius.circular(50.0)),
                                   border: Border.all(
@@ -371,9 +379,18 @@ class Reg_page extends State<Reg_p> {
                                     width: 1.7,
                                   ),
                                 ),
+                                child: ClipOval(
+                                  child: Image.network(
+                                    Users.last.avatarUrl!,
+                                    width: 20,
+                                    height: 20,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
-
                             ),
+
+
                             Text(
                               '????',
                               style:

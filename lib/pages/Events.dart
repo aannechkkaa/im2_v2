@@ -1,6 +1,9 @@
 
+import 'dart:js_util';
+
 import 'package:flutter/material.dart';
 import 'package:im2/pages/Comment.dart';
+import 'package:im2/pages/Users.dart';
 
 class Event with ChangeNotifier {
   String _category = "";
@@ -9,11 +12,14 @@ class Event with ChangeNotifier {
   String _longDescription = "";
   String _place = "";
   String _chatLink = "";
+  User _event_autor = newObject();
   DateTime _Date = DateTime.now();
   TimeOfDay _Time = TimeOfDay.now();
   int _index = 0;
   List<Comment_class> _comments = [];
+  List<User> _participants = [];
 
+  User get event_autor => _event_autor;
   String? _picURL1 = "";
   String? _picURL2 = "";
 
@@ -29,6 +35,12 @@ class Event with ChangeNotifier {
   TimeOfDay get Time => _Time;
   int get index => _index;
   List<Comment_class> get comments => _comments;
+  List<User> get participants => _participants;
+
+  void setEvent_autor(User autor) {
+    _event_autor = autor;
+    notifyListeners();
+  }
 
   void setCategory(String category) {
     _category = category;

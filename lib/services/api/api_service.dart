@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:im2/models/user_model.dart';
 
 class ApiService {
-  static String APIUrl = 'http://10.0.2.2:3000';
+  static String APIUrl = 'http://167.71.196.196:80';
   static String authEndpoint = '/auth';
   String? jwt;
 

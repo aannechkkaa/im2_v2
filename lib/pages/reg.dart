@@ -1,16 +1,26 @@
 
+import 'dart:convert';
 import 'dart:io';
-import 'package:im2/pages/add_event.dart';
+import 'dart:js_util';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:im2/pages/MyWidgets/Avatar_builder.dart';
 import 'package:im2/pages/home.dart';
+import 'package:im2/pages/Users.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:file_picker/file_picker.dart';
+//import 'package:email_validator/email_validator.dart';
+
+import 'dart:html' as html;
+
 
 
 
 bool _isObscured = true;
 bool _isObscured2 = true;
+String name = "";
+
 
 class Reg_p extends StatefulWidget {
   const Reg_p({Key? key}) : super(key: key);
@@ -20,7 +30,6 @@ class Reg_p extends StatefulWidget {
 }
 
 class Reg_page extends State<Reg_p> {
-
 
 
 
@@ -44,20 +53,46 @@ class Home_route extends StatefulWidget{
 
 class Home_route_state extends State<Home_route>{
 
+  String? avatarUrl;
+  String user_name_reg = "";
+  String user_email = "";
+  String user_password = "";
+  String user_description = "";
+  int user_age = 0;
+  DateTime birth_date = DateTime.now();
+  String check_password = "";
 
-  File? avatar;
-  Future pickImage() async{
-    try{
-      final avatar = await ImagePicker().pickImage(source: ImageSource.gallery);
-      if (avatar == null) return;
 
-      final imageTemporary = File(avatar.path);
-      setState(() => this.avatar = imageTemporary);
-    } on PlatformException catch(e){
-      print('Failed to pick nimage: $e');
-    }
+  Future pickImage() async {
+    final input = html.FileUploadInputElement();
+    input.accept = 'image/*';
+    input.click();
 
+    await input.onChange.first;
+    final file = input.files!.first;
+
+    final reader = html.FileReader();
+    reader.readAsDataUrl(file);
+
+    await reader.onLoad.first;
+    final encodedImage = reader.result as String;
+
+    final bytes = base64.decode(encodedImage.split(',').last);
+    final blob = html.Blob([bytes], 'image/jpeg');
+    final url = html.Url.createObjectUrl(blob);
+
+    setState(() => this.avatarUrl = url);
   }
+
+  bool isValidPassword(String password) {
+    RegExp regExp = RegExp(r'^[a-zA-Z0-9@#!]{7,}$');
+    if (!regExp.hasMatch(password)) {
+      // Если строка пароля не соответствует заданному шаблону, вы можете вывести сообщение об ошибке или выполнить другие действия.
+      return false;
+    }
+    return true;
+  }
+
 
   @override
   bool? isCheked = false;
@@ -83,239 +118,325 @@ class Home_route_state extends State<Home_route>{
           centerTitle: true,
         ),
 
-        body: SafeArea(child:
-        Column(
+        body:
+        ListView(
           children: [
-            SizedBox( height: 20,),
+            //SafeArea(child:
+            Column(
+              children: [
+                Padding(padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
+                    child:
+
+                    Center(
+                      child:
+                      Stack(
+                          children: <Widget>[
 
 
-        Stack(
-        children: <Widget>[
+
+                            Center(
+
+                                child:
+                                Container(
+                                  child: buildAvatar(avatarUrl),
+                                  //padding: EdgeInsets.all(8),
+                                )
+
+
+                            ),
+                            Center(
+                              child:
+                              Padding(padding: EdgeInsets.fromLTRB(165, 20, 0, 0),
+                                child:
+
+                                CircleAvatar(
+                                  radius: 20,
+                                  backgroundColor: Color.fromARGB(255, 247, 183, 59),
+                                  child: IconButton(onPressed: (){
+
+                                    pickImage();
+                                  },
+
+                                    color: Colors.white,
+                                    icon: Icon(Icons.camera_alt_outlined),
+                                    iconSize: 20,
+                                  ),
+                                ),
+
+
+                              ),
+                            ),
+
+
+                          ]),
+                    )
+
+
+                ),
 
 
 
-        Center(
 
-        child:
-        avatar != null
-        ? Image.file(
-          avatar!,
-          width: 160,
-          height: 160,
-          fit: BoxFit.cover,
-        )
-                : CircleAvatar(
-            backgroundImage: AssetImage('assets/wom.jpeg'),
-      minRadius: 50,
-      maxRadius: 90,
-    ),
+                SizedBox(height: 30,),
+                Card(
+                  child: TextField(
+                    onChanged: (String user_name) {
+                      setState(() {
+                        user_name_reg = user_name.trim();
+                      });
+                    },
+                    //obscureText: true,
+                    decoration:
+                    //Padding(padding: const EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),),
+                    InputDecoration(
+                      labelText: 'Имя пользователя',
+                      labelStyle: TextStyle(fontSize: 17, color: Colors.blueGrey, fontFamily: 'Oswald'),
+                      contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
+                    ),
+                  ),
+                ),
 
-    ),
-    Center(
-    child:
-    Padding(padding: EdgeInsets.fromLTRB(165, 20, 0, 0),
-    child:
+                SizedBox(height: 10,),
 
-    CircleAvatar(
-    radius: 20,
-    backgroundColor: Color.fromARGB(255, 247, 183, 59),
-    child: IconButton(onPressed: (){
-
-    pickImage();
+                SizedBox(height: 10,),
+                Card(
+                  child:
+    TextButton(
+    onPressed: () {
+      showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+    firstDate:DateTime(1900, 1, 1),
+    lastDate: DateTime.now(),
+    ).then((value) {
+      print("Selected date: $value");
+      setState(() {
+      birth_date = value!;
+        });
+      });
     },
-
-    color: Colors.white,
-    icon: Icon(Icons.camera_alt_outlined),
-    iconSize: 20,
+    child: Row(
+    children: [
+      Text(
+      'Дата     ',
+      style: TextStyle(
+      fontSize: 18,
+      color: Colors.blueGrey,
+      fontFamily: 'Oswald',
+        ),
+      ),
+      Text(
+      birth_date != null
+      ? "${birth_date.day}/${birth_date.month}/${birth_date.year}"
+         : "",
+      style: TextStyle(
+       fontSize: 17,
+        color: Colors.black,
+        fontFamily: 'Oswald',
+      ),
+      ),
+    ],
     ),
-    ),
-
-
-    ),
-    ),
-
-
-    ]),
-
-
-
-
-            SizedBox(height: 30,),
-            Card(
-              child: TextField(
-                obscureText: true,
-                decoration:
-                //Padding(padding: const EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),),
-                InputDecoration(
-                  labelText: 'Имя пользователя',
-                  labelStyle: TextStyle(fontSize: 17, color: Colors.blueGrey, fontFamily: 'Oswald'),
-                  contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
                 ),
-              ),
-            ),
-
-            SizedBox(height: 10,),
-
-            // Row(
-            //   children: [
-            //     Padding(
-            //       padding: const EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
-            //     ),
-            //     Text('Пол', style:
-            //     TextStyle(
-            //       fontSize: 15,
-            //       fontFamily: 'Oswald',
-            //     )),
-            //     SizedBox(width: 30,),
-            //     Checkbox(
-            //         value: isCheked,
-            //         tristate: true,
-            //         activeColor: Colors.green,
-            //         onChanged: (now_checked){
-            //           setState((){
-            //             isCheked = true;
-            //           });
-            //         }),
-            //     SizedBox(width: 5,),
-            //     Text('Мужской', style:
-            //     TextStyle(
-            //       fontSize: 15,
-            //       fontFamily: 'Oswald',
-            //     )
-            //     ),
-            //     SizedBox(width: 20,),
-            //     Checkbox(
-            //         value: isCheked,
-            //         tristate: true,
-            //         activeColor: Colors.green,
-            //         onChanged: (now_checked){
-            //           setState((){
-            //             isCheked = true;
-            //           });
-            //         }),
-            //     SizedBox(width: 5,),
-            //     Text('Женский', style:
-            //     TextStyle(
-            //       fontSize: 15,
-            //       fontFamily: 'Oswald',
-            //     )
-            //     ),
-            //   ],
-            // ),
-
-            SizedBox(height: 10,),
-            Card(
-              child: TextField(
-                //controller: date,
-                decoration:
-
-                //Padding(padding: const EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),),
-                const InputDecoration(
-
-                  labelText: 'Дата рождения',
-                  labelStyle: TextStyle(fontSize: 17, color: Colors.blueGrey, fontFamily: 'Oswald'),
-                  contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),),
-                onTap: () async{
-                  DateTime? pickeddate = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(1900),
-                      lastDate: DateTime(2005));
-                },
-              ),
-            ),
-
-            SizedBox(height: 10,),
-
-            Card(
-              child: TextField(
-                keyboardType: TextInputType.emailAddress,
-                // obscureText: true,
-                decoration:
-                //Padding(padding: const EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),),
-                InputDecoration(
-                  labelText: 'Почта',
-                  labelStyle: TextStyle(fontSize: 17, color: Colors.blueGrey, fontFamily: 'Oswald'),
-                  contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
                 ),
-              ),
-            ),
 
-            SizedBox(height: 10,),
 
-            Card(
-              child: TextField(
-                obscureText: _isObscured,
-                decoration:
-                //Padding(padding: const EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),),
-                InputDecoration(
+                SizedBox(height: 10,),
 
-                  suffix: IconButton(
-                    icon: Icon(_isObscured ? Icons.visibility_off : Icons.visibility),
-                    onPressed: () {
-                      setState(() {
-                        _isObscured = !_isObscured;
-                      });
+                Card(
+                  child: TextField(
+                    //keyboardType: TextInputType.emailAddress,
+                    // obscureText: true,
+                    decoration:
+                    //Padding(padding: const EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),),
+                    InputDecoration(
+                      labelText: 'Опишите себя: вашу профессию, образование, хобби...',
+                      labelStyle: TextStyle(fontSize: 17, color: Colors.blueGrey, fontFamily: 'Oswald'),
+                      contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
+                    ),
+                    onChanged: (String description) {
+                      user_description = description.trim();
                     },
                   ),
-
-                  labelText: 'Пароль',
-                  labelStyle: TextStyle(fontSize: 17, color: Colors.blueGrey, fontFamily: 'Oswald'),
-                  contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
                 ),
-              ),
-            ),
 
-            SizedBox(height: 10,),
+                SizedBox(height: 10,),
 
-            Card(
-              child: TextField(
-                obscureText: _isObscured2,
-                decoration:
-                //Padding(padding: const EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),),
-                InputDecoration(
-
-                  suffix: IconButton(
-                    icon: Icon(_isObscured2 ? Icons.visibility_off : Icons.visibility),
-                    onPressed: () {
-                      setState(() {
-                        _isObscured2 = !_isObscured2;
-                      });
+                Card(
+                  child: TextField(
+                    keyboardType: TextInputType.emailAddress,
+                    // obscureText: true,
+                    decoration:
+                    //Padding(padding: const EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),),
+                    InputDecoration(
+                      labelText: 'Почта',
+                      labelStyle: TextStyle(fontSize: 17, color: Colors.blueGrey, fontFamily: 'Oswald'),
+                      contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
+                    ),
+                    onChanged: (String email) {
+                      user_email = email.trim();
                     },
                   ),
-
-                  labelText: 'Подтверждение пароля',
-                  labelStyle: TextStyle(fontSize: 17, color: Colors.blueGrey, fontFamily: 'Oswald'),
-                  contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
                 ),
-              ),
+
+                SizedBox(height: 10,),
+
+                Card(
+                  child: TextField(
+                    obscureText: _isObscured,
+                    onChanged: (String password) {
+                        user_password = password.trim();
+                    },
+                    decoration: InputDecoration(
+                      suffix: IconButton(
+                        icon: Icon(_isObscured ? Icons.visibility_off : Icons.visibility),
+                        onPressed: () {
+                          setState(() {
+                            _isObscured = !_isObscured;
+                          });
+                        },
+                      ),
+                      labelText: 'Пароль',
+                      labelStyle: TextStyle(fontSize: 17, color: Colors.blueGrey, fontFamily: 'Oswald'),
+                      contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 10,),
+
+                Card(
+                  child: TextField(
+                    obscureText: _isObscured2,
+                    onChanged: (String check){
+                      check_password = check;
+                    },
+                    decoration:
+                    //Padding(padding: const EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),),
+                    InputDecoration(
+
+                      suffix: IconButton(
+                        icon: Icon(_isObscured2 ? Icons.visibility_off : Icons.visibility),
+                        onPressed: () {
+                          setState(() {
+                            _isObscured2 = !_isObscured2;
+                          });
+                        },
+                      ),
+
+                      labelText: 'Подтверждение пароля',
+                      labelStyle: TextStyle(fontSize: 17, color: Colors.blueGrey, fontFamily: 'Oswald'),
+                      contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 50,),
+
+
+
+
+
+
+                TextButton(
+                  onPressed: () {
+                    if(
+                    (user_name_reg == "")||(user_password == "")||(avatarUrl == "")||(user_description == "")||(user_email =="")||(check_password == "")
+                    ){
+                      showDialog(context: context, builder: (BuildContext context) {
+                        return AlertDialog(
+                            title: Text("Вы заполнили не все поля!",
+                              style:
+                              TextStyle(
+                                fontSize: 18,
+                                fontFamily: 'Oswald',
+                                color: Colors.black,
+                              ),),
+
+                        );
+                      });
+                    }
+                    else if(user_password != check_password){
+                      showDialog(context: context, builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text("Пароли не совпадают!",
+                            style:
+                            TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Oswald',
+                              color: Colors.black,
+                            ),),
+
+                        );
+                      });
+                    }
+                    else if(((DateTime.now().difference(birth_date).inDays / 365).floor() < 16)){
+                      showDialog(context: context, builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text("К сожалению, вы не достигли возраста 16-ти лет и не можете использовать приложение.",
+                            style:
+                            TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Oswald',
+                              color: Colors.black,
+                            ),),
+
+                        );
+                      });
+                    }
+                    else  if (!isValidPassword(user_password)) {
+                      showDialog(context: context, builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text("Ваш пароль не соответствует правилам",
+                            style:
+                            TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Oswald',
+                              color: Colors.black,
+                            ),),
+                          content: Text(
+                              "Ваш пароль должен состоять только из символов латинского алфавита, цифп и символов @, # и !. Также длина пароля не должна быть меньше 6 символов"
+                          ),
+
+                        );
+                      });
+                    }
+                    else{
+                      User user = User();
+                      Users.add(User(
+
+                      )
+                      );
+                      Users.last.register(user_name_reg, user_password, avatarUrl, (DateTime.now().difference(birth_date).inDays / 365).floor() , Users.length, user_description, user_email);
+                      Navigator.of(context).pushNamed(Home.routeName);
+                    }
+
+                  },
+
+                  child: Text('Зарегестрироваться', style:
+                  TextStyle(
+                    fontSize: 18,
+                    color: Colors.white,
+                    fontFamily: 'Oswald',
+                  ),
+                  ),
+                  style: ButtonStyle(
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      )),
+                      backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 16, 79, 58),),
+                      minimumSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width-20,40))
+                  ),
+                ),
+                SizedBox(
+                  height: 50,
+                )
+              ],
             ),
-
-            SizedBox(height: 80,),
-
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed(Home.routeName);
-              },
-
-              child: Text('Зарегестрироваться', style:
-              TextStyle(
-                fontSize: 18,
-                color: Colors.white,
-                fontFamily: 'Oswald',
-              ),
-              ),
-              style: ButtonStyle(
-                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  )),
-                  backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 16, 79, 58),),
-                  minimumSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width-20,40))
-              ),
-            )
+           // )
           ],
         ),
-        )
+
     );
   }
 }
