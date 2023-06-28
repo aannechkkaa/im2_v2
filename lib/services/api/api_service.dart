@@ -39,19 +39,20 @@ class ApiService {
     throw Error();
   }
 
-  static Future<UserModel> register(String email, String password, String? name, File? image) async {
+  static Future<UserModel> register(String email, int age, String password, String? name, File? image) async {
     final url = Uri.parse('$APIUrl$authEndpoint/register');    
     final request = http.MultipartRequest('POST', url);
 
     request.fields['email'] = email;
     request.fields['password'] = password;
+    request.fields['age'] = age.toString();
     if (name != null) {
       request.fields['name'] = name;
     }
     if (image != null) {
       request.files.add(http.MultipartFile('file', image.readAsBytes().asStream(), image.lengthSync(), filename: image.uri.pathSegments.last));
     }
-    
+
     final response = await request.send();
 
     if (response.statusCode == 201) {
