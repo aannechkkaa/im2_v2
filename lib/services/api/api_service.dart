@@ -2,15 +2,25 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:im2/models/user_model.dart';
+import 'package:im2/services/api/comment_api_service.dart';
+import 'package:im2/services/api/event_api_service.dart';
+import 'package:im2/services/api/user_api_service.dart';
 
 class ApiService {
   static String APIUrl = 'http://167.71.196.196:80';
   static String authEndpoint = '/auth';
-  String? jwt;
+  
+  late CommentApiService commentApi;
+  late UserApiService userApi;
+  late EventApiService eventApi;
 
-  ApiService([this.jwt]);
-
-  Future<String> logIn(String email, String password) async {
+  ApiService(String token) {
+    commentApi = CommentApiService(APIUrl, token);
+    userApi = UserApiService(APIUrl, token);
+    eventApi = EventApiService(APIUrl, token);
+  }
+  
+  static Future<String> logIn(String email, String password) async {
     final url = Uri.parse('$APIUrl$authEndpoint/login');
     final Map<String, dynamic> data = {
       'email' : email,
@@ -29,24 +39,25 @@ class ApiService {
     throw Error();
   }
 
-  setToken(String token) {
-    jwt = token;
-  }
+  static Future<UserModel> register(String email, int age, String password, String? name, File? image) async {
+    final url = Uri.parse('$APIUrl$authEndpoint/register');    
+    final request = http.MultipartRequest('POST', url);
 
-  Future<UserModel> register(String email, String password, String? name) async {
-    final url = Uri.parse('$APIUrl$authEndpoint/register');
-    final Map<String, dynamic> data = {
-      'email': email,
-      'password': password,
-    };
+    request.fields['email'] = email;
+    request.fields['password'] = password;
+    request.fields['age'] = age.toString();
     if (name != null) {
-      data['name'] = name;
+      request.fields['name'] = name;
     }
-    final response = await http.post(url,
-      body: data
-    );
+    if (image != null) {
+      request.files.add(http.MultipartFile('file', image.readAsBytes().asStream(), image.lengthSync(), filename: image.uri.pathSegments.last));
+    }
+
+    final response = await request.send();
+
     if (response.statusCode == 201) {
-      final data = jsonDecode(response.body);
+      final body = await response.stream.bytesToString();
+      final data = jsonDecode(body);
       return UserModel.fromJson(data);
     }
     throw Error();

@@ -8,7 +8,9 @@ class EventModel {
   int id;
   String name;
   String? description;
+  String? shortDescription;
   String? groupLink;
+  List<String>? images;
   Status status;
   DateTime date;
   UserModel host;
@@ -31,7 +33,12 @@ class EventModel {
       Iterable l = data["comments"];
       event.comments = List<CommentModel>.from(l.map((item) => CommentModel.fromJson(item)));
     }
+    if(data["images"] != null) {
+      final str = data["images"] as String;
+      event.images = str.split(',');
+    }
     event.description = data["description"] as String?;
+    event.shortDescription = data["shortDescription"] as String?;
     event.groupLink = data["groupLink"] as String?;
 
     return event;

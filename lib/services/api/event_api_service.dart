@@ -47,7 +47,7 @@ class EventApiService {
     return List<EventModel>.from(result.map((item) => EventModel.fromJson(item)));
   }
 
-  Future<EventModel> createEvent(String name, String? description, DateTime date, Status status) async {
+  Future<EventModel> createEvent(String name, String? description, DateTime date, Status status, List<File>? images) async {
     final uri = Uri.http(APIUrl, endpoint);
     final Map<String, dynamic> data  = {
       "name": name,
@@ -57,13 +57,23 @@ class EventApiService {
     if (description != null) {
       data["description"] = description;
     }
-    final response = await http.post(uri, headers: {
-      HttpHeaders.contentTypeHeader: 'application/json',
-      HttpHeaders.authorizationHeader: 'Bearer $JwtToken',
-    }, body: jsonEncode(data));
+    final request = http.MultipartRequest('POST', uri);
+    request.headers['Authorization'] = 'Bearer $JwtToken';
+    
+    if (images != null && images.isNotEmpty) {
+      for (final image in images) {
+        request.files.add(http.MultipartFile('file', image.readAsBytes().asStream(), image.lengthSync(), filename: image.uri.pathSegments.last));
+      }
+    }
+    
+    data.forEach((key, value) {
+      request.fields[key] = value;
+    });
+    final response = await request.send();
 
     if(response.statusCode == 201) {
-      final result = jsonDecode(response.body);
+      final body = await response.stream.bytesToString();
+      final result = jsonDecode(body);
       return EventModel.fromJson(result);
     }
 
