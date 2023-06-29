@@ -20,7 +20,8 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home>{
-  List<Event> current_events = [];
+  List<Event> current_events = events_add_page;
+  List<Event> filteredEvents = [];
   //Event e1 = new Event();
   int Count = 0;
   int Current_index = 0;
@@ -101,7 +102,10 @@ class HomeState extends State<Home>{
                     ),
                     InkWell(
                       onTap: () {
-                        // Handle button press
+                        setState(() {
+
+                        current_events = events_add_page.where((event) => event.category == "Активный отдых").toList();
+                        });
                       },
                       child: Image.asset(
                         "assets/active.jpg",
@@ -114,6 +118,10 @@ class HomeState extends State<Home>{
                     SizedBox(width: 10,),
                     InkWell(
                       onTap: () {
+                        setState(() {
+
+                        current_events = events_add_page.where((event) => event.category == "Кафе и рестораны").toList();
+                          });
                         // Handle button press
                       },
                       child: Image.asset(
@@ -127,7 +135,10 @@ class HomeState extends State<Home>{
                     SizedBox(width: 10,),
                     InkWell(
                       onTap: () {
-                        // Handle button press
+                        setState(() {
+
+                          current_events = events_add_page.where((event) => event.category == "Искусство и культура").toList();
+                        });
                       },
                       child: Image.asset(
                         "assets/art.jpg",
@@ -139,7 +150,10 @@ class HomeState extends State<Home>{
                     SizedBox(width: 10,),
                     InkWell(
                       onTap: () {
-                        // Handle button press
+                        setState(() {
+
+                          current_events = events_add_page.where((event) => event.category == "Отдых на природе").toList();
+                        });
                       },
                       child: Image.asset(
                         "assets/nature.jpg",
@@ -151,7 +165,10 @@ class HomeState extends State<Home>{
                     SizedBox(width: 10,),
                     InkWell(
                       onTap: () {
-                        // Handle button press
+                        setState(() {
+
+                          current_events = events_add_page.where((event) => event.category == "Ночная жизнь").toList();
+                        });
                       },
                       child: Image.asset(
                         "assets/night.jpg",
@@ -163,7 +180,10 @@ class HomeState extends State<Home>{
                     SizedBox(width: 10,),
                     InkWell(
                       onTap: () {
-                        // Handle button press
+                        setState(() {
+
+                          current_events = events_add_page.where((event) => event.category == "Путешествия").toList();
+                        });
                       },
                       child: Image.asset(
                         "assets/trevel.jpg",
@@ -183,19 +203,28 @@ class HomeState extends State<Home>{
                 ),
 
               ),
-              SizedBox(height: 10,),
-              TextButton(onPressed: (){
+              SizedBox(height: 6,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(width: 10,),
+                  TextButton(onPressed: (){
+                    setState(() {
+                      current_events = events_add_page;
+                    });
+                  },
+                      child: Text(
+                        "Показать всe",
+                        style:
+                        TextStyle(
+                          fontSize: 14,
+                          color: Colors.blueGrey,
+                          //fontFamily: 'Oswald',
+                        ),
+                      )),
 
-              },
-                  child: Text(
-                    "Показать все",
-                    style:
-                    TextStyle(
-                      fontSize: 18,
-                      color: Colors.blueGrey,
-                      //fontFamily: 'Oswald',
-                    ),
-                  )),
+                ],
+              ),
 
               // Container(
               //   width: double.infinity,
@@ -227,10 +256,10 @@ class HomeState extends State<Home>{
               ),
 
               SizedBox(
-                height: events_add_page.length * 250,
+                height: current_events.length * 250,
                 child:
                 ListView.builder(
-                    itemCount: events_add_page.length,
+                    itemCount: current_events.length,
                     itemBuilder: (BuildContext context, int index){
                       return
                       Container(
@@ -257,7 +286,7 @@ class HomeState extends State<Home>{
                                   builder: (context) => new Event_page())
                               );
                             },
-                            key: Key(events_add_page[index].index.toString()),
+                            key: Key(current_events[index].index.toString()),
                             child: Container(
                               width: MediaQuery.of(context).size.width * 0.95,
                               //height: 185,
@@ -285,7 +314,7 @@ class HomeState extends State<Home>{
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           SizedBox(width : 20),
-                                          Text(events_add_page[index].Date.day.toString() + "/" + events_add_page[index].Date.month.toString() + "/" + (events_add_page[index].Date.year.toInt() % 100).toString(),
+                                          Text(current_events[index].Date.day.toString() + "/" + current_events[index].Date.month.toString() + "/" + (current_events[index].Date.year.toInt() % 100).toString(),
 
                                             style:
                                             TextStyle(
@@ -294,7 +323,7 @@ class HomeState extends State<Home>{
                                               color: Colors.white,
                                             ),),
 
-                                          Text(events_add_page[index].Time.toString()[10] + events_add_page[index].Time.toString()[11] + events_add_page[index].Time.toString()[12] + events_add_page[index].Time.toString()[13] + events_add_page[index].Time.toString()[14] ,
+                                          Text(current_events[index].Time.toString()[10] + current_events[index].Time.toString()[11] + current_events[index].Time.toString()[12] + current_events[index].Time.toString()[13] + current_events[index].Time.toString()[14] ,
                                             style:
                                             TextStyle(
                                               fontSize: 21,
@@ -325,7 +354,7 @@ class HomeState extends State<Home>{
                                                               width: 40,
                                                               child:
                                                               Flexible(child:
-                                                              Text(events_add_page[index].place,
+                                                              Text(current_events[index].place,
                                                                 softWrap: true,
                                                                 maxLines: 2,
 
@@ -414,14 +443,14 @@ class HomeState extends State<Home>{
                                           children: [
                                             ClipOval(
                                               child: Image.network(
-                                                events_add_page[index].event_autor.avatarUrl!,
+                                                current_events[index].event_autor.avatarUrl!,
                                                 width: 30,
                                                 height: 30,
                                                 fit: BoxFit.cover,
                                               ),
                                             ),
                                             SizedBox(width : MediaQuery.of(context).size.width * 0.04,),
-                                            Text(events_add_page[index].event_autor.username + "," + " " + events_add_page[index].event_autor.age.toString(),
+                                            Text(current_events[index].event_autor.username + "," + " " + current_events[index].event_autor.age.toString(),
                                               style:
                                               TextStyle(
                                                 fontSize: 18,
@@ -434,7 +463,7 @@ class HomeState extends State<Home>{
                                           children: [
                                             Container(
                                               width: MediaQuery.of(context).size.width * 0.5,
-                                              child: Text(events_add_page[index].name,
+                                              child: Text(current_events[index].name,
                                                 softWrap: true,
                                                 style:
                                                 TextStyle(
@@ -450,7 +479,7 @@ class HomeState extends State<Home>{
                                             Container(
                                               width: MediaQuery.of(context).size.width * 0.5,
                                               child:
-                                              Text(events_add_page[index].shortDescription,
+                                              Text(current_events[index].shortDescription,
                                                 softWrap: true,
                                                 style:
                                                 TextStyle(
@@ -470,9 +499,9 @@ class HomeState extends State<Home>{
                                         ),
                                         Row(
                                           children: [
-                                            home_pics_builder(context, events_add_page[index].picURL1),
+                                            home_pics_builder(context, current_events[index].picURL1),
                                             SizedBox(width: 2,),
-                                            home_pics_builder(context, events_add_page[index].picURL2),
+                                            home_pics_builder(context, current_events[index].picURL2),
                                           ],
                                         )
                                       ],

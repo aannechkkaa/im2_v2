@@ -5,17 +5,21 @@ import 'dart:io';
 import 'package:flutter_svg/svg.dart';
 import 'package:im2/pages/add_event.dart';
 import 'package:im2/pages/Users.dart';
+import 'package:im2/pages/Events.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:im2/pages/MyWidgets/Avatar_builder.dart';
 import 'package:im2/pages/home.dart';
 import 'package:im2/pages/edit_profile.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:file_picker/file_picker.dart';
-//import 'package:email_validator/email_validator.dart';
+import 'package:im2/pages/Event.dart';
 
 import 'dart:html' as html;
+
+import 'MyWidgets/home_pics.dart';
+
+
 
 
 class Reg_p extends StatefulWidget {
@@ -27,6 +31,9 @@ class Reg_p extends StatefulWidget {
 
 class Reg_page extends State<Reg_p> {
   String? avatarUrl;
+
+
+
 
   Future pickImage() async {
     final input = html.FileUploadInputElement();
@@ -54,7 +61,7 @@ class Reg_page extends State<Reg_p> {
 
 
 
-
+  List<Event> my_events = events_add_page.where((event) => event.event_autor.id == Users.last.id).toList();
 
   String userName = Users.last.username;
   int userAge = Users.last.age;
@@ -270,6 +277,281 @@ class Reg_page extends State<Reg_p> {
                         )
                       ],
                     ),
+                    Row(
+                      children: [
+                          Text(
+                            "Созданные вами события",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: 'Oswald',
+                              color: Color.fromARGB(255, 247, 183, 59),
+                            ),
+                          ),
+                      ],
+
+                    ),
+                      SizedBox(
+                      height: my_events.length * 250,
+    child:
+    ListView.builder(
+    itemCount: my_events.length,
+    itemBuilder: (BuildContext context, int index){
+    return
+    Container(
+    width: MediaQuery.of(context).size.width * 0.95,
+    child:
+    IntrinsicHeight(
+    child: ElevatedButton(
+    style:
+    ElevatedButton.styleFrom(
+    elevation: 0,
+    //fixedSize: Size(MediaQuery.of(context).size.width * 0.95, 170),
+    padding: EdgeInsets.all(0),
+
+    backgroundColor: Colors.transparent,
+    //borderRadius: BorderRadius.all(Radius.circular(20)),
+    side: BorderSide(color: Colors.transparent,
+    width: 1),
+    ),
+    onPressed: (){
+    //Navigator.pushNamed(context, '/event');
+    //Event_page() event_page = new Event_page();
+    Event_index = index;
+    Navigator.push(context, new MaterialPageRoute(
+    builder: (context) => new Event_page())
+    );
+    },
+    key: Key(my_events[index].index.toString()),
+    child: Container(
+    width: MediaQuery.of(context).size.width * 0.95,
+    //height: 185,
+    margin: const EdgeInsets.only(top: 10),
+    padding: const EdgeInsets.only(top: 15, left: 15, bottom: 15),
+    // constraints: BoxConstraints(
+    //   minHeight: 40, //minimum height
+    //   maxHeight: 185,
+    // ),
+    decoration: const BoxDecoration(
+    borderRadius: BorderRadius.all(Radius.circular(20)),
+    color: Color.fromARGB(255, 16, 79, 58),
+
+    ),
+    child:
+    Row(
+
+    mainAxisAlignment: MainAxisAlignment.start,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+    SizedBox(
+    width: 70,
+    child: Column(
+    mainAxisAlignment: MainAxisAlignment.start,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+    SizedBox(width : 20),
+    Text(my_events[index].Date.day.toString() + "/" + my_events[index].Date.month.toString() + "/" + (my_events[index].Date.year.toInt() % 100).toString(),
+
+    style:
+    TextStyle(
+    fontSize: 21,
+    fontFamily: 'Oswald',
+    color: Colors.white,
+    ),),
+
+    Text(my_events[index].Time.toString()[10] + my_events[index].Time.toString()[11] + my_events[index].Time.toString()[12] + my_events[index].Time.toString()[13] + my_events[index].Time.toString()[14] ,
+    style:
+    TextStyle(
+    fontSize: 21,
+    fontFamily: 'Oswald',
+    color: Color.fromARGB(255, 247, 183, 59),
+    ),),
+
+    SizedBox(height : 10),
+    Row(
+
+    children: [
+
+
+    SizedBox(
+    width: 70,
+    child: Column(
+    children: [
+    Row(
+    children: [
+    Column(
+    children: [
+    Icon(Icons.place_outlined),
+    ],
+    ),
+    Column(
+    children: [
+    Container(
+    width: 40,
+    child:
+    Flexible(child:
+    Text(my_events[index].place,
+    softWrap: true,
+    maxLines: 2,
+
+    style:
+    TextStyle(
+    fontSize: 15,
+    fontFamily: 'Oswald',
+    color: Color.fromARGB(255, 154, 220, 184),
+    ),),),
+    )
+
+
+    ],
+    )
+    ],
+    )
+
+    //Icon(Icons.place_outlined),
+
+    // Flexible
+    //   (child: new Text(Events_list[index].place,
+    //   style: TextStyle(
+    //     fontSize: 15,
+    //     fontFamily: 'Oswald',
+    //     color: Color.fromARGB(255, 154, 220, 184),),
+    //   overflow: TextOverflow.clip,),),
+
+
+
+
+
+    ],
+    ),
+    )
+
+
+
+    ],
+    )
+    ],
+    ),
+    ),
+
+
+    SizedBox(width : MediaQuery.of(context).size.width * 0.03,),
+    Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+    Row(
+    children: [
+    SizedBox(
+    height: 5,
+    )
+    ],
+    ),
+    Row(
+    children: [
+    Image(image: AssetImage('assets/Vector_1.png')),
+    // Divider(
+    //   height: double.infinity,
+    //   thickness: 2,
+    //   color: Colors.grey,
+    //   indent: 10,
+    //   endIndent: 10,
+    // )
+    ],
+    ),
+    Row(
+    children: [
+    SizedBox(
+    height: 5,
+    )
+    ],
+    ),
+
+    ],
+    ),
+    SizedBox(width : MediaQuery.of(context).size.width * 0.03,),
+
+    Column(
+    mainAxisAlignment: MainAxisAlignment.start,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+    Row(
+    children: [
+    ClipOval(
+    child: Image.network(
+    my_events[index].event_autor.avatarUrl!,
+    width: 30,
+    height: 30,
+    fit: BoxFit.cover,
+    ),
+    ),
+    SizedBox(width : MediaQuery.of(context).size.width * 0.04,),
+    Text(my_events[index].event_autor.username + "," + " " + my_events[index].event_autor.age.toString(),
+    style:
+    TextStyle(
+    fontSize: 18,
+    fontFamily: 'Oswald',
+    color: Color.fromARGB(255, 247, 183, 59),
+    ),),
+    ],
+    ),
+    Row(
+    children: [
+    Container(
+    width: MediaQuery.of(context).size.width * 0.5,
+    child: Text(my_events[index].name,
+    softWrap: true,
+    style:
+    TextStyle(
+    fontSize: 18,
+    fontFamily: 'Oswald',
+    color: Color.fromARGB(255, 247, 183, 59),
+    ),),
+    ),
+    ],
+    ),
+    Row(
+    children: [
+    Container(
+    width: MediaQuery.of(context).size.width * 0.5,
+    child:
+    Text(my_events[index].shortDescription,
+    softWrap: true,
+    style:
+    TextStyle(
+    fontSize: 15,
+    fontFamily: 'Oswald',
+    color: Colors.white,
+    ),),
+    )
+    ],
+    ),
+    Row(
+    children: [
+    SizedBox(
+    height: 8,
+    )
+    ],
+    ),
+    Row(
+    children: [
+    home_pics_builder(context, my_events[index].picURL1),
+    SizedBox(width: 2,),
+    home_pics_builder(context, my_events[index].picURL2),
+    ],
+    )
+    ],
+    )
+    ]
+    ),
+    ),
+    ),
+    ),
+
+    );
+
+    }
+    ),
+    ),
 
                     // ],
                     //),
