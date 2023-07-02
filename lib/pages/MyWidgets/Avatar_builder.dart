@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 
+bool delete_button = false;
+
 Widget buildAvatar(String? avatarURL) {
   if (avatarURL == null) {
     return ClipOval(
@@ -18,12 +20,16 @@ Widget buildAvatar(String? avatarURL) {
 
     ); // or any other default widget to show when the URL is null
   }
-  return ClipOval(
-    child: Image.network(
-      avatarURL,
-      width: 150,
-      height: 150,
-      fit: BoxFit.cover,
-    ),
-  );
+  else{
+    return ClipOval(
+      child: Image.network(
+        avatarURL,
+        width: 150,
+        height: 150,
+        fit: BoxFit.cover,
+      ),
+    );
+  }
+
+
 }

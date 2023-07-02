@@ -1,12 +1,19 @@
 
 import 'dart:convert';
-import 'dart:io';
+
+import 'dart:html';
 import 'dart:js_util';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:im2/pages/MyWidgets/Avatar_builder.dart';
+import 'package:im2/pages/first_page.dart';
 import 'package:im2/pages/home.dart';
 import 'package:im2/pages/Users.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
+
+
+
 import 'package:image_picker/image_picker.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:file_picker/file_picker.dart';
@@ -14,8 +21,14 @@ import 'package:file_picker/file_picker.dart';
 
 import 'dart:html' as html;
 
+import 'package:im2/services/api/api_service.dart';
 
+class PickedImage {
+  final html.File file;
+  final String url;
 
+  PickedImage({required this.file, required this.url});
+}
 
 bool _isObscured = true;
 bool _isObscured2 = true;
@@ -38,6 +51,7 @@ class Reg_page extends State<Reg_p> {
   Widget build(BuildContext context ){
     bool? isCheked = false;
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(primaryColor: Colors.green),
       home: Home_route(),
       routes: {Home.routeName: (_)=> Home()},
@@ -54,6 +68,7 @@ class Home_route extends StatefulWidget{
 class Home_route_state extends State<Home_route>{
 
   String? avatarUrl;
+  File? avatarFile;
   String user_name_reg = "";
   String user_email = "";
   String user_password = "";
@@ -63,7 +78,7 @@ class Home_route_state extends State<Home_route>{
   String check_password = "";
 
 
-  Future pickImage() async {
+  Future<PickedImage> pickImage() async {
     final input = html.FileUploadInputElement();
     input.accept = 'image/*';
     input.click();
@@ -77,12 +92,19 @@ class Home_route_state extends State<Home_route>{
     await reader.onLoad.first;
     final encodedImage = reader.result as String;
 
-    final bytes = base64.decode(encodedImage.split(',').last);
-    final blob = html.Blob([bytes], 'image/jpeg');
-    final url = html.Url.createObjectUrl(blob);
+    final pickedImage = PickedImage(file: file, url: encodedImage);
 
-    setState(() => this.avatarUrl = url);
+    setState(() {
+      this.avatarUrl = pickedImage.url;
+    });
+
+    return pickedImage;
   }
+
+
+
+
+
 
   bool isValidPassword(String password) {
     RegExp regExp = RegExp(r'^[a-zA-Z0-9@#!]{7,}$');
@@ -101,24 +123,53 @@ class Home_route_state extends State<Home_route>{
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
-            color: Color.fromARGB(255, 16, 79, 58),
+            color: Color.fromARGB(255, 50, 50, 50),
             iconSize: 30,
+
+
             onPressed: () => {
-              Navigator.of(context).pop(),
+
+              Navigator.push(context, PageTransition(type: PageTransitionType.leftToRight, child: Reg_route())
+
+
+
+            )
             },
+
+
           ),
-          backgroundColor: Colors.white,
+          backgroundColor: Color.fromARGB(255, 244, 244, 244),
           title: Text('Регистрация', style:
           TextStyle(
             fontSize: 30,
             fontFamily: 'Oswald',
-            color: Colors.black,
+            color: Color.fromARGB(255, 50, 50, 50),
           ),
           ),
           centerTitle: true,
         ),
+        backgroundColor:  Color.fromARGB(255, 255, 247, 225),
 
         body:
+
+        Stack(
+          children: [
+          Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 30,
+            ),
+            Image.asset(
+              'assets/bg_img.png',
+              // Укажите размер изображения
+              width: MediaQuery.of(context).size.width * 1,
+              //height: MediaQuery.of(context).size.height * 1,
+              fit: BoxFit.fill,
+            ),
+          ],
+        ),
         ListView(
           children: [
             //SafeArea(child:
@@ -151,13 +202,13 @@ class Home_route_state extends State<Home_route>{
 
                                 CircleAvatar(
                                   radius: 20,
-                                  backgroundColor: Color.fromARGB(255, 247, 183, 59),
+                                  backgroundColor: Color.fromARGB(255, 163, 161, 225),
                                   child: IconButton(onPressed: (){
 
                                     pickImage();
                                   },
 
-                                    color: Colors.white,
+                                    color: Color.fromARGB(255, 50, 50, 50),
                                     icon: Icon(Icons.camera_alt_outlined),
                                     iconSize: 20,
                                   ),
@@ -179,6 +230,7 @@ class Home_route_state extends State<Home_route>{
 
                 SizedBox(height: 30,),
                 Card(
+                  color: Color.fromARGB(200, 255, 255, 255),
                   child: TextField(
                     onChanged: (String user_name) {
                       setState(() {
@@ -200,6 +252,7 @@ class Home_route_state extends State<Home_route>{
 
                 SizedBox(height: 10,),
                 Card(
+                  color: Color.fromARGB(200, 255, 255, 255),
                   child:
     TextButton(
     onPressed: () {
@@ -244,6 +297,7 @@ class Home_route_state extends State<Home_route>{
                 SizedBox(height: 10,),
 
                 Card(
+                  color: Color.fromARGB(200, 255, 255, 255),
                   child: TextField(
                     //keyboardType: TextInputType.emailAddress,
                     // obscureText: true,
@@ -263,6 +317,7 @@ class Home_route_state extends State<Home_route>{
                 SizedBox(height: 10,),
 
                 Card(
+                  color: Color.fromARGB(200, 255, 255, 255),
                   child: TextField(
                     keyboardType: TextInputType.emailAddress,
                     // obscureText: true,
@@ -282,7 +337,9 @@ class Home_route_state extends State<Home_route>{
                 SizedBox(height: 10,),
 
                 Card(
+                  color: Color.fromARGB(200, 255, 255, 255),
                   child: TextField(
+
                     obscureText: _isObscured,
                     onChanged: (String password) {
                         user_password = password.trim();
@@ -306,6 +363,7 @@ class Home_route_state extends State<Home_route>{
                 SizedBox(height: 10,),
 
                 Card(
+                  color: Color.fromARGB(200, 255, 255, 255),
                   child: TextField(
                     obscureText: _isObscured2,
                     onChanged: (String check){
@@ -339,7 +397,7 @@ class Home_route_state extends State<Home_route>{
 
 
                 TextButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if(
                     (user_name_reg == "")||(user_password == "")||(avatarUrl == "")||(user_description == "")||(user_email =="")||(check_password == "")
                     ){
@@ -395,7 +453,7 @@ class Home_route_state extends State<Home_route>{
                               color: Colors.black,
                             ),),
                           content: Text(
-                              "Ваш пароль должен состоять только из символов латинского алфавита, цифп и символов @, # и !. Также длина пароля не должна быть меньше 6 символов"
+                              "Ваш пароль должен состоять только из символов латинского алфавита, цифр и символов @, # и !. Также длина пароля не должна быть меньше 7 символов"
                           ),
 
                         );
@@ -403,12 +461,38 @@ class Home_route_state extends State<Home_route>{
                     }
                     else{
                       User user = User();
-                      Users.add(User(
-
-                      )
+                      Users.add(User()
                       );
-                      Users.last.register(user_name_reg, user_password, avatarUrl, (DateTime.now().difference(birth_date).inDays / 365).floor() , Users.length, user_description, user_email);
-                      Navigator.of(context).pushNamed(Home.routeName);
+                      if((user_email == "admin@mail.ru")&&(user_password == "admin_password")){
+                        current_user.register(user_name_reg, user_password, avatarUrl, (DateTime.now().difference(birth_date).inDays / 365).floor() , Users.length, user_description, user_email, true);
+                      }
+                      else{
+                        Users.last.register(user_name_reg, user_password, avatarUrl, (DateTime.now().difference(birth_date).inDays / 365).floor() , Users.length, user_description, user_email, false);
+                        current_user = Users.last;
+                      }
+
+
+
+                    //
+                    //   void saveDataUriToFile(String dataUri, String filePath) {
+                    //     // Remove the data URI prefix
+                    //     String base64Content = dataUri.split(',').last;
+                    //
+                    //     // Decode the base64 content to bytes
+                    //     Uint8List bytes = base64Decode(base64Content);
+                    //
+                    //     // Save the bytes to a file
+                    //     File(filePath).writeAsBytesSync(bytes);
+                    //   }
+                    //
+                    //
+                    //
+                    //
+                    //
+                    // final userModel = await ApiService.register(user_email, (DateTime.now().difference(birth_date).inDays / 365).floor(), user_password, user_name_reg, avatarUrl);
+                    //
+                    //   print('Зарегистрированный пользователь: ${userModel.name}, ${userModel.email}');
+                      Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeft, child: Home()));
                     }
 
                   },
@@ -416,7 +500,7 @@ class Home_route_state extends State<Home_route>{
                   child: Text('Зарегестрироваться', style:
                   TextStyle(
                     fontSize: 18,
-                    color: Colors.white,
+                    color: Color.fromARGB(255, 50, 50, 50),
                     fontFamily: 'Oswald',
                   ),
                   ),
@@ -424,7 +508,7 @@ class Home_route_state extends State<Home_route>{
                       shape: MaterialStateProperty.all(RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       )),
-                      backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 16, 79, 58),),
+                      backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 163, 161, 225),),
                       minimumSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width-20,40))
                   ),
                 ),
@@ -436,6 +520,8 @@ class Home_route_state extends State<Home_route>{
            // )
           ],
         ),
+      ]
+        )
 
     );
   }

@@ -1,0 +1,15 @@
+<svg width="251" height="254" viewBox="0 0 251 254" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="124.576" cy="126.576" r="24.5756" stroke="#6E5694" stroke-width="10"/>
+<circle cx="29.5756" cy="29.5756" r="24.5756" transform="matrix(-0.486057 0.873927 0.873927 0.486057 28.751 39)" stroke="#6E5694" stroke-width="10"/>
+<line y1="-5" x2="43" y2="-5" transform="matrix(-0.873927 -0.486057 -0.486057 0.873927 99.1318 118.193)" stroke="#6E5694" stroke-width="10"/>
+<circle cx="29.5756" cy="29.5756" r="24.5756" transform="matrix(0.493262 0.86988 0.86988 -0.493262 0 164.326)" stroke="#6E5694" stroke-width="10"/>
+<line y1="-5" x2="43" y2="-5" transform="matrix(-0.86988 0.493262 0.493262 0.86988 104.252 145.446)" stroke="#6E5694" stroke-width="10"/>
+<circle cx="124.576" cy="224.424" r="24.5756" transform="rotate(180 124.576 224.424)" stroke="#6E5694" stroke-width="10"/>
+<line x1="124.151" y1="154" x2="124.151" y2="197" stroke="#6E5694" stroke-width="10"/>
+<circle cx="209.849" cy="175.465" r="24.5756" transform="rotate(119.555 209.849 175.465)" stroke="#6E5694" stroke-width="10"/>
+<line x1="148.379" y1="141.096" x2="185.784" y2="162.307" stroke="#6E5694" stroke-width="10"/>
+<circle cx="209.94" cy="79.2063" r="24.5756" transform="rotate(60.9182 209.94 79.2063)" stroke="#6E5694" stroke-width="10"/>
+<line x1="148.6" y1="113.807" x2="186.179" y2="92.907" stroke="#6E5694" stroke-width="10"/>
+<circle cx="124.576" cy="29.5756" r="24.5756" stroke="#6E5694" stroke-width="10"/>
+<line x1="125" y1="100" x2="125" y2="57" stroke="#6E5694" stroke-width="10"/>
+</svg>

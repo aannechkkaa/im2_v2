@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+//import 'dart:html' as html;
 import 'package:http/http.dart' as http;
 import 'package:im2/models/user_model.dart';
 import 'package:im2/services/api/comment_api_service.dart';
@@ -39,8 +40,8 @@ class ApiService {
     throw Error();
   }
 
-  static Future<UserModel> register(String email, int age, String password, String? name, File? image) async {
-    final url = Uri.parse('$APIUrl$authEndpoint/register');    
+  static Future<UserModel> register(String email, int age, String password, String? name, String? imagePath) async {
+    final url = Uri.parse('$APIUrl$authEndpoint/register');
     final request = http.MultipartRequest('POST', url);
 
     request.fields['email'] = email;
@@ -49,8 +50,13 @@ class ApiService {
     if (name != null) {
       request.fields['name'] = name;
     }
-    if (image != null) {
-      request.files.add(http.MultipartFile('file', image.readAsBytes().asStream(), image.lengthSync(), filename: image.uri.pathSegments.last));
+    if (imagePath != null) {
+      final imageFile = File(imagePath);
+      final stream = http.ByteStream(imageFile.openRead());
+      final length =  imageFile.length();
+
+      final multipartFile = http.MultipartFile('file', stream, length as int, filename: imageFile.path);
+      request.files.add(multipartFile);
     }
 
     final response = await request.send();
@@ -59,8 +65,11 @@ class ApiService {
       final body = await response.stream.bytesToString();
       final data = jsonDecode(body);
       return UserModel.fromJson(data);
+    } else {
+      throw Error();
     }
-    throw Error();
   }
+
+
 
 }

@@ -1,7 +1,11 @@
+import 'dart:js_util';
+
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 List<User> Users = [];
+User current_user = newObject();
+int user_id = 0;
 // Создаем класс, который будет содержать данные пользователя и наследоваться от ChangeNotifier.
 class User with ChangeNotifier {
   String _username = "";
@@ -11,6 +15,7 @@ class User with ChangeNotifier {
   int _age = 0;
   int _id = 0;
   String _email = "";
+  bool _is_admin = false;
 
   String get username => _username;
 
@@ -26,6 +31,8 @@ class User with ChangeNotifier {
 
   int get id => _id;
 
+  bool get is_admin => _is_admin;
+
   void register(
       String username,
       String password,
@@ -34,6 +41,7 @@ class User with ChangeNotifier {
       int id,
       String description,
       String mail,
+      bool is_admin,
       ) {
     _username = username;
     _password = password;
@@ -42,6 +50,7 @@ class User with ChangeNotifier {
     _email = mail;
     _id = id;
     _profile_description = description;
+    _is_admin = is_admin;
     notifyListeners();
   }
 

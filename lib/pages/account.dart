@@ -1,7 +1,6 @@
 
 import 'dart:convert';
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter_svg/svg.dart';
 import 'package:im2/pages/add_event.dart';
 import 'package:im2/pages/Users.dart';
@@ -61,13 +60,13 @@ class Reg_page extends State<Reg_p> {
 
 
 
-  List<Event> my_events = events_add_page.where((event) => event.event_autor.id == Users.last.id).toList();
+  List<Event> my_events = events_add_page.where((event) => event.event_autor.id == current_user.id).toList();
 
-  String userName = Users.last.username;
-  int userAge = Users.last.age;
+  String userName = current_user.username;
+  int userAge = current_user.age;
   int user_raiting = 5;
   String user_description = "Я Андрей люблю друзей, театры, кино вытсавки, учусь в ДВФУ по направлению прикладная информатика";
-  String? User_avatar_url = Users.last.avatarUrl;
+  String? User_avatar_url =current_user.avatarUrl;
   TextEditingController date = TextEditingController();
 
   @override
@@ -80,12 +79,12 @@ class Reg_page extends State<Reg_p> {
           actions: [
             IconButton(
               onPressed: () {
-                  // Navigator.push(context, PageTransition(
-                  //     type: PageTransitionType.fade,
-                  //     child: Edit_p()));
+                   Navigator.push(context, PageTransition(
+                       type: PageTransitionType.fade,
+                       child: Edit_page()));
 
 
-              }, icon: Icon(Icons.settings), iconSize: 35,)
+              }, icon: Icon(Icons.settings, color: Color.fromARGB(255, 50, 50, 50),), iconSize: 35,)
           ],
           // leading: Padding(padding: EdgeInsets.only(
           //     left: 12.0, top: 7.0, bottom: 7.0),
@@ -100,18 +99,37 @@ class Reg_page extends State<Reg_p> {
           //   )
           // ),
           automaticallyImplyLeading: false,
-          backgroundColor: Color.fromARGB(255, 16, 79, 58),
+          backgroundColor:  Color.fromARGB(255, 244, 244, 244),
           title: Text('Профиль', style:
           TextStyle(
             fontSize: 30,
             fontFamily: 'Oswald',
-            color: Colors.white,
+            color: Color.fromARGB(255, 50, 50, 50),
           ),
           ),
           centerTitle: false,
         ),
+        backgroundColor:  Color.fromARGB(255, 255, 247, 225),
 
         body:
+              Stack(
+                children: [
+                Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Image.asset(
+                    'assets/bg_img.png',
+                    // Укажите размер изображения
+                    width: MediaQuery.of(context).size.width * 1,
+                    //height: MediaQuery.of(context).size.height * 1,
+                    fit: BoxFit.fill,
+                  ),
+                ],
+              ),
             ListView(
               children: [
                 Column(
@@ -167,92 +185,92 @@ class Reg_page extends State<Reg_p> {
                     ),
 
                     Text(
-                      Users.last.username + ", " + userAge.toString(),
+                      current_user.username + ", " + userAge.toString(),
                       style: TextStyle(
                         fontSize: 25,
                         fontFamily: 'Oswald',
-                        color: Color.fromARGB(255, 16, 79, 58),
+                        color: Color.fromARGB(255, 50, 50, 50),
                       ),
                     ),
                     //Row(
                     //children: [
-                    Center(
-                        child:
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Ваш рейтинг: " + user_raiting.toString(),
-                              style: TextStyle(
-                                fontSize: 15,
-                              ),
-                            ),
-                            Icon(
-                              Icons.star_rate_rounded,
-                            ),
-                            // SizedBox(
-                            //   width: 2,
-                            // ),
-                            Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                child:
-                                IconButton(onPressed: (){
-                                  showDialog(context: context, builder: (BuildContext context) {
-                                    return AlertDialog(
-                                        title: Text("На чем основан рейтинг?",
-                                          style:
-                                          TextStyle(
-                                            fontSize: 20,
-                                            fontFamily: 'Oswald',
-                                            color: Colors.black,
-                                          ),),
-
-                                        content:
-                                        SizedBox(
-                                          height: 330,
-                                          child:
-                                          Column(
-                                            children: [
-                                              Text(
-                                                "Рейтинг создан для повышения безопасности реальных встреч.",
-
-                                              ),
-                                              Text(
-                                                  "Он помогает модераторам приложения отследить фэйковые страницы и блокировать пользователей, зарегестировавшихся под чужими фото и именами."
-                                              ),
-                                              Text(
-                                                  "Рейтинг выставляют участники посещенных вами событий."
-                                              ),
-                                              Text(
-                                                  "Также рейтинг может снижаться, если вы регулярно не приходили на мероприятия без предупрждения участников."
-                                              )
-                                            ],
-                                          ),
-                                        )
-                                    );
-                                  });
-                                },
-                                  icon: Icon(
-                                      Icons.info_outline
-                                  ),
-                                  color: Colors.grey,
-                                  iconSize: 15,
-                                )
-                            )
-
-                          ],
-                        )
-                    ),
+                    // Center(
+                    //     child:
+                    //     Row(
+                    //       mainAxisAlignment: MainAxisAlignment.center,
+                    //       children: [
+                    //         Text(
+                    //           "Ваш рейтинг: " + user_raiting.toString(),
+                    //           style: TextStyle(
+                    //             fontSize: 15,
+                    //           ),
+                    //         ),
+                    //         Icon(
+                    //           Icons.star_rate_rounded,
+                    //         ),
+                    //         // SizedBox(
+                    //         //   width: 2,
+                    //         // ),
+                    //         Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    //             child:
+                    //             IconButton(onPressed: (){
+                    //               showDialog(context: context, builder: (BuildContext context) {
+                    //                 return AlertDialog(
+                    //                     title: Text("На чем основан рейтинг?",
+                    //                       style:
+                    //                       TextStyle(
+                    //                         fontSize: 20,
+                    //                         fontFamily: 'Oswald',
+                    //                         color: Colors.black,
+                    //                       ),),
+                    //
+                    //                     content:
+                    //                     SizedBox(
+                    //                       height: 330,
+                    //                       child:
+                    //                       Column(
+                    //                         children: [
+                    //                           Text(
+                    //                             "Рейтинг создан для повышения безопасности реальных встреч.",
+                    //
+                    //                           ),
+                    //                           Text(
+                    //                               "Он помогает модераторам приложения отследить фэйковые страницы и блокировать пользователей, зарегестировавшихся под чужими фото и именами."
+                    //                           ),
+                    //                           Text(
+                    //                               "Рейтинг выставляют участники посещенных вами событий."
+                    //                           ),
+                    //                           Text(
+                    //                               "Также рейтинг может снижаться, если вы регулярно не приходили на мероприятия без предупрждения участников."
+                    //                           )
+                    //                         ],
+                    //                       ),
+                    //                     )
+                    //                 );
+                    //               });
+                    //             },
+                    //               icon: Icon(
+                    //                   Icons.info_outline
+                    //               ),
+                    //               color: Colors.grey,
+                    //               iconSize: 15,
+                    //             )
+                    //         )
+                    //
+                    //       ],
+                    //     )
+                    // ),
                     Center(
                         child:
                         Padding(
                           padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
                           child:
                           Text(
-                            Users.last.profile_description,
+                            current_user.profile_description,
                             style: TextStyle(
                               fontSize: 17,
                               fontFamily: 'Oswald',
-                              color: Color.fromARGB(255, 16, 79, 58),
+                              color: Colors.blueGrey,
                             ),
                           ),
                         )
@@ -268,7 +286,7 @@ class Reg_page extends State<Reg_p> {
                           // padding: const EdgeInsets.all(3.0),
                           decoration: BoxDecoration(
                               border: Border(
-                                  bottom: BorderSide(color: Colors.black, width: 1.4)
+                                  bottom: BorderSide(color: Colors.white, width: 1.4)
                               )
                           ),
                           child: SizedBox(
@@ -277,19 +295,22 @@ class Reg_page extends State<Reg_p> {
                         )
                       ],
                     ),
+                    SizedBox(height: 20,),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                           Text(
                             "Созданные вами события",
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 25,
                               fontFamily: 'Oswald',
-                              color: Color.fromARGB(255, 247, 183, 59),
+                              color: Color.fromARGB(255, 50, 50, 50),
                             ),
                           ),
                       ],
 
                     ),
+                      SizedBox(height: 10,),
                       SizedBox(
                       height: my_events.length * 250,
     child:
@@ -300,252 +321,269 @@ class Reg_page extends State<Reg_p> {
     Container(
     width: MediaQuery.of(context).size.width * 0.95,
     child:
-    IntrinsicHeight(
-    child: ElevatedButton(
-    style:
-    ElevatedButton.styleFrom(
-    elevation: 0,
-    //fixedSize: Size(MediaQuery.of(context).size.width * 0.95, 170),
-    padding: EdgeInsets.all(0),
 
-    backgroundColor: Colors.transparent,
-    //borderRadius: BorderRadius.all(Radius.circular(20)),
-    side: BorderSide(color: Colors.transparent,
-    width: 1),
-    ),
-    onPressed: (){
-    //Navigator.pushNamed(context, '/event');
-    //Event_page() event_page = new Event_page();
-    Event_index = index;
-    Navigator.push(context, new MaterialPageRoute(
-    builder: (context) => new Event_page())
-    );
-    },
-    key: Key(my_events[index].index.toString()),
-    child: Container(
-    width: MediaQuery.of(context).size.width * 0.95,
-    //height: 185,
-    margin: const EdgeInsets.only(top: 10),
-    padding: const EdgeInsets.only(top: 15, left: 15, bottom: 15),
-    // constraints: BoxConstraints(
-    //   minHeight: 40, //minimum height
-    //   maxHeight: 185,
-    // ),
-    decoration: const BoxDecoration(
-    borderRadius: BorderRadius.all(Radius.circular(20)),
-    color: Color.fromARGB(255, 16, 79, 58),
+      ElevatedButton(
+        style:
+        ElevatedButton.styleFrom(
+          elevation: 0,
+          //fixedSize: Size(MediaQuery.of(context).size.width * 0.95, 170),
+          padding: EdgeInsets.all(0),
 
-    ),
-    child:
-    Row(
+          backgroundColor: Colors.transparent,
+          //borderRadius: BorderRadius.all(Radius.circular(20)),
+          side: BorderSide(color: Colors.transparent,
+              width: 1),
+        ),
+        onPressed: (){
+          //Navigator.pushNamed(context, '/event');
+          //Event_page() event_page = new Event_page();
+          Event_index = index;
+          Navigator.push(context, new MaterialPageRoute(
+              builder: (context) => new Event_page())
+          );
+        },
+        key: Key(my_events[index].index.toString()),
+        child: Container(
+          width: MediaQuery.of(context).size.width * 0.95,
+          //height: 185,
+          margin: const EdgeInsets.only(top: 10),
+          padding: const EdgeInsets.only(top: 15, left: 15, bottom: 15),
+          // constraints: BoxConstraints(
+          //   minHeight: 40, //minimum height
+          //   maxHeight: 185,
+          // ),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            color: Color.fromARGB(207, 92, 90, 124),
 
-    mainAxisAlignment: MainAxisAlignment.start,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-    SizedBox(
-    width: 70,
-    child: Column(
-    mainAxisAlignment: MainAxisAlignment.start,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-    SizedBox(width : 20),
-    Text(my_events[index].Date.day.toString() + "/" + my_events[index].Date.month.toString() + "/" + (my_events[index].Date.year.toInt() % 100).toString(),
+          ),
+          child:
+          Row(
 
-    style:
-    TextStyle(
-    fontSize: 21,
-    fontFamily: 'Oswald',
-    color: Colors.white,
-    ),),
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Visibility(
+                  visible: false,
+                  child:  Row(
+                    children: [
+                      TextButton(
+                          onPressed: (){
+                            setState(() {
+                              events_add_page.removeAt(index + 1);
+                              current_events.removeAt(index + 1);
+                            });
+                          },
+                          child: Text("Удалить")
+                      )
+                    ],
+                  ),
+                ),
 
-    Text(my_events[index].Time.toString()[10] + my_events[index].Time.toString()[11] + my_events[index].Time.toString()[12] + my_events[index].Time.toString()[13] + my_events[index].Time.toString()[14] ,
-    style:
-    TextStyle(
-    fontSize: 21,
-    fontFamily: 'Oswald',
-    color: Color.fromARGB(255, 247, 183, 59),
-    ),),
+                SizedBox(
+                  width: 70,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(width : 20),
+                      Text(my_events[index].Date.day.toString() + "/" + my_events[index].Date.month.toString() + "/" + (my_events[index].Date.year.toInt() % 100).toString(),
 
-    SizedBox(height : 10),
-    Row(
+                        style:
+                        TextStyle(
+                          fontSize: 21,
+                          fontFamily: 'Oswald',
+                          color: Colors.white,
+                        ),),
 
-    children: [
+                      Text(my_events[index].Time.toString()[10] + my_events[index].Time.toString()[11] + my_events[index].Time.toString()[12] + my_events[index].Time.toString()[13] + my_events[index].Time.toString()[14] ,
+                        style:
+                        TextStyle(
+                          fontSize: 21,
+                          fontFamily: 'Oswald',
+                          color: Color.fromARGB(255, 248, 231, 174),
+                        ),),
 
+                      SizedBox(height : 10),
+                      Row(
 
-    SizedBox(
-    width: 70,
-    child: Column(
-    children: [
-    Row(
-    children: [
-    Column(
-    children: [
-    Icon(Icons.place_outlined),
-    ],
-    ),
-    Column(
-    children: [
-    Container(
-    width: 40,
-    child:
-    Flexible(child:
-    Text(my_events[index].place,
-    softWrap: true,
-    maxLines: 2,
-
-    style:
-    TextStyle(
-    fontSize: 15,
-    fontFamily: 'Oswald',
-    color: Color.fromARGB(255, 154, 220, 184),
-    ),),),
-    )
+                        children: [
 
 
-    ],
-    )
-    ],
-    )
+                          SizedBox(
+                            width: 70,
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Icon(Icons.place_outlined),
 
-    //Icon(Icons.place_outlined),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: [
+                                        Container(
+                                          width: 40,
+                                          child:
+                                          Flexible(child:
+                                          Text(my_events[index].place,
+                                            softWrap: true,
+                                            maxLines: 2,
 
-    // Flexible
-    //   (child: new Text(Events_list[index].place,
-    //   style: TextStyle(
-    //     fontSize: 15,
-    //     fontFamily: 'Oswald',
-    //     color: Color.fromARGB(255, 154, 220, 184),),
-    //   overflow: TextOverflow.clip,),),
-
-
-
-
-
-    ],
-    ),
-    )
-
-
-
-    ],
-    )
-    ],
-    ),
-    ),
+                                            style:
+                                            TextStyle(
+                                              fontSize: 15,
+                                              fontFamily: 'Oswald',
+                                              color: Color.fromARGB(255, 248, 231, 174),
+                                            ),),),
+                                        )
 
 
-    SizedBox(width : MediaQuery.of(context).size.width * 0.03,),
-    Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    crossAxisAlignment: CrossAxisAlignment.center,
-    children: [
-    Row(
-    children: [
-    SizedBox(
-    height: 5,
-    )
-    ],
-    ),
-    Row(
-    children: [
-    Image(image: AssetImage('assets/Vector_1.png')),
-    // Divider(
-    //   height: double.infinity,
-    //   thickness: 2,
-    //   color: Colors.grey,
-    //   indent: 10,
-    //   endIndent: 10,
-    // )
-    ],
-    ),
-    Row(
-    children: [
-    SizedBox(
-    height: 5,
-    )
-    ],
-    ),
+                                      ],
+                                    )
+                                  ],
+                                )
 
-    ],
-    ),
-    SizedBox(width : MediaQuery.of(context).size.width * 0.03,),
+                                //Icon(Icons.place_outlined),
 
-    Column(
-    mainAxisAlignment: MainAxisAlignment.start,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-    Row(
-    children: [
-    ClipOval(
-    child: Image.network(
-    my_events[index].event_autor.avatarUrl!,
-    width: 30,
-    height: 30,
-    fit: BoxFit.cover,
-    ),
-    ),
-    SizedBox(width : MediaQuery.of(context).size.width * 0.04,),
-    Text(my_events[index].event_autor.username + "," + " " + my_events[index].event_autor.age.toString(),
-    style:
-    TextStyle(
-    fontSize: 18,
-    fontFamily: 'Oswald',
-    color: Color.fromARGB(255, 247, 183, 59),
-    ),),
-    ],
-    ),
-    Row(
-    children: [
-    Container(
-    width: MediaQuery.of(context).size.width * 0.5,
-    child: Text(my_events[index].name,
-    softWrap: true,
-    style:
-    TextStyle(
-    fontSize: 18,
-    fontFamily: 'Oswald',
-    color: Color.fromARGB(255, 247, 183, 59),
-    ),),
-    ),
-    ],
-    ),
-    Row(
-    children: [
-    Container(
-    width: MediaQuery.of(context).size.width * 0.5,
-    child:
-    Text(my_events[index].shortDescription,
-    softWrap: true,
-    style:
-    TextStyle(
-    fontSize: 15,
-    fontFamily: 'Oswald',
-    color: Colors.white,
-    ),),
-    )
-    ],
-    ),
-    Row(
-    children: [
-    SizedBox(
-    height: 8,
-    )
-    ],
-    ),
-    Row(
-    children: [
-    home_pics_builder(context, my_events[index].picURL1),
-    SizedBox(width: 2,),
-    home_pics_builder(context, my_events[index].picURL2),
-    ],
-    )
-    ],
-    )
-    ]
-    ),
-    ),
-    ),
-    ),
+                                // Flexible
+                                //   (child: new Text(Events_list[index].place,
+                                //   style: TextStyle(
+                                //     fontSize: 15,
+                                //     fontFamily: 'Oswald',
+                                //     color: Color.fromARGB(255, 154, 220, 184),),
+                                //   overflow: TextOverflow.clip,),),
+
+
+
+
+
+                              ],
+                            ),
+                          )
+
+
+
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+
+
+                SizedBox(width : MediaQuery.of(context).size.width * 0.03,),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      children: [
+                        SizedBox(
+                          height: 5,
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Image(image: AssetImage('assets/Vector_1.png')),
+                        // Divider(
+                        //   height: double.infinity,
+                        //   thickness: 2,
+                        //   color: Colors.grey,
+                        //   indent: 10,
+                        //   endIndent: 10,
+                        // )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          height: 5,
+                        )
+                      ],
+                    ),
+
+                  ],
+                ),
+                SizedBox(width : MediaQuery.of(context).size.width * 0.03,),
+
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        ClipOval(
+                          child: Image.network(
+                            my_events[index].event_autor.avatarUrl!,
+                            width: 30,
+                            height: 30,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        SizedBox(width : MediaQuery.of(context).size.width * 0.04,),
+                        Text(my_events[index].event_autor.username + "," + " " + my_events[index].event_autor.age.toString(),
+                          style:
+                          TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'Oswald',
+                            color: Color.fromARGB(255, 248, 231, 174),
+                          ),),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.5,
+                          child: Text(my_events[index].name,
+                            softWrap: true,
+                            style:
+                            TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Oswald',
+                              color: Color.fromARGB(255, 248, 231, 174),
+                            ),),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.5,
+                          child:
+                          Text(my_events[index].shortDescription,
+                            softWrap: true,
+                            style:
+                            TextStyle(
+                              fontSize: 15,
+                              fontFamily: 'Oswald',
+                              color: Colors.white,
+                            ),),
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          height: 8,
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        home_pics_builder(context, my_events[index].picURL1),
+                        SizedBox(width: 2,),
+                        home_pics_builder(context, my_events[index].picURL2),
+                      ],
+                    )
+                  ],
+                )
+              ]
+          ),
+        ),
+      ),
 
     );
 
@@ -584,6 +622,8 @@ class Reg_page extends State<Reg_p> {
                 ),
               ],
             ),
+        ]
+              ),
 
 
 
@@ -592,7 +632,7 @@ class Reg_page extends State<Reg_p> {
 
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Color.fromARGB(255, 16, 79, 58),
+          backgroundColor: Colors.white,
           onPressed: () {
             Navigator.push(context, PageTransition(
                 type: PageTransitionType.fade,
@@ -601,10 +641,10 @@ class Reg_page extends State<Reg_p> {
                 child: add_event()));
           },
           child: SvgPicture.asset(
-            'assets/add_icon_white.svg',
+            'assets/add_icon.svg',
             // Укажите размер изображения
-            width: 30,
-            height: 30,
+            width: 35,
+            height: 35,
           ),
         ),
         bottomNavigationBar: BottomAppBar(
@@ -628,16 +668,16 @@ class Reg_page extends State<Reg_p> {
                                   child: Home()));
                             }),
                                 icon: Icon(Icons.map_outlined,
-                                  color: Color.fromARGB(255, 16, 79, 58),
+                                  color: Color.fromARGB(255, 50, 50, 50),
                                   size: 25,)
                             ),
                             Text(
-                              '?????',
+                              'Обзор',
                               style:
                               TextStyle(
                                 fontSize: 16,
                                 fontFamily: 'Oswald',
-                                color: Color.fromARGB(255, 16, 79, 58),
+                                color: Color.fromARGB(255, 50, 50, 50),
                               ),
                             )
                           ],
@@ -657,13 +697,13 @@ class Reg_page extends State<Reg_p> {
                                   borderRadius: BorderRadius.all(
                                       Radius.circular(50.0)),
                                   border: Border.all(
-                                    color: Color.fromARGB(255, 247, 183, 59),
+                                    color: Color.fromARGB(255, 74, 68, 134),
                                     width: 1.7,
                                   ),
                                 ),
                                 child: ClipOval(
                                   child: Image.network(
-                                    Users.last.avatarUrl!,
+                                    current_user.avatarUrl!,
                                     width: 20,
                                     height: 20,
                                     fit: BoxFit.cover,
@@ -674,12 +714,12 @@ class Reg_page extends State<Reg_p> {
 
 
                             Text(
-                              '????',
+                              'Профиль',
                               style:
                               TextStyle(
                                 fontSize: 16,
                                 fontFamily: 'Oswald',
-                                color: Color.fromARGB(255, 247, 183, 59),
+                                color: Color.fromARGB(255, 74, 68, 134),
                               ),
                             )
                           ],

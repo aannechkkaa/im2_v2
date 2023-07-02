@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gifimage/flutter_gifimage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:im2/pages/first_page.dart';
+import 'dart:html';
 
 
 class hello_page extends StatefulWidget {
@@ -25,7 +26,7 @@ class _hello_pageState extends State<hello_page> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+        backgroundColor:  Color.fromARGB(255, 255, 247, 225),
       body:
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -37,10 +38,10 @@ class _hello_pageState extends State<hello_page> {
               ),
               Center(
                 child: SvgPicture.asset(
-                  'assets/hello_page_name.svg',
+                  'assets/hello_page_logo.svg',
                   // Укажите размер изображения
-                  width: 130,
-                  height: 130,
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  //height: 130,
                 ),
 
               )

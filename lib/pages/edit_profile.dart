@@ -1,12 +1,13 @@
 
 import 'dart:convert';
-import 'dart:io';
+import 'dart:html';
 import 'dart:js_util';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:im2/pages/MyWidgets/Avatar_builder.dart';
 import 'package:im2/pages/home.dart';
 import 'package:im2/pages/Users.dart';
+import 'package:im2/pages/first_page.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:file_picker/file_picker.dart';
@@ -21,47 +22,47 @@ bool _isObscured = true;
 bool _isObscured2 = true;
 String name = "";
 
-
-class Edit_p extends StatefulWidget {
-  const Edit_p({Key? key}) : super(key: key);
-  static const routeName = "reg_page";
-  @override
-  Edit_profile createState() => Edit_profile();
+TextEditingController date = TextEditingController();
+@override
+Widget build(BuildContext context ){
+  bool? isCheked = false;
+  return MaterialApp(
+    theme: ThemeData(primaryColor: Colors.green),
+    //home: Home_route(),
+    //routes: {Home.routeName: (_)=> Home()},
+  );
 }
-
-class Edit_profile extends State<Edit_p> {
-
-
-
-  TextEditingController date = TextEditingController();
-  @override
-  Widget build(BuildContext context ){
-    bool? isCheked = false;
-    return MaterialApp(
-      theme: ThemeData(primaryColor: Colors.green),
-      home: Home_route(),
-      routes: {Home.routeName: (_)=> Home()},
-    );
-  }
 //const Account({Key? key}) : super(key: key);
-}
 
-class Home_route extends StatefulWidget{
+class Edit_page extends StatefulWidget {
+  const Edit_page({super.key});
+
+
+
   @override
-  Home_route_state createState() => Home_route_state();
+  State<Edit_page> createState() => _Edit_pageState();
 }
 
-class Home_route_state extends State<Home_route>{
+class _Edit_pageState extends State<Edit_page> {
 
-  String? adit_avatar;
+
+  String? edit_avatar;
   String user_name_edit = "";
   String user_email_edit = "";
   String user_password_edit = "";
   //String user_description = "";
-  int user_age = Users.last.age;
-  DateTime birth_date = DateTime(DateTime.now().year - Users.last.age, DateTime.now().month, DateTime.now().day);
+  int user_age = current_user.age;
+  DateTime birth_date = DateTime(DateTime.now().year - current_user.age, DateTime.now().month, DateTime.now().day);
   String check_password = "";
 
+
+  User? findUserByLoginAndPassword(List<User> userList, String login, String password) {
+    try {
+      return userList.firstWhere((user) => user.email == login && user.password == password);
+    } catch (e) {
+      return null;
+    }
+  }
 
   Future pickImage() async {
     final input = html.FileUploadInputElement();
@@ -81,7 +82,7 @@ class Home_route_state extends State<Home_route>{
     final blob = html.Blob([bytes], 'image/jpeg');
     final url = html.Url.createObjectUrl(blob);
 
-    setState(() => this.adit_avatar = url);
+    setState(() => this.edit_avatar = url);
   }
 
   bool isValidPassword(String password) {
@@ -95,30 +96,50 @@ class Home_route_state extends State<Home_route>{
 
 
   @override
-  bool? isCheked = false;
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
-          color: Color.fromARGB(255, 16, 79, 58),
+          color: Color.fromARGB(255, 50, 50, 50),
           iconSize: 30,
           onPressed: () => {
             Navigator.of(context).pop(),
           },
         ),
-        backgroundColor: Colors.white,
+        backgroundColor:  Color.fromARGB(255, 244, 244, 244),
         title: Text('Редактировать профиль', style:
         TextStyle(
           fontSize: 30,
           fontFamily: 'Oswald',
-          color: Colors.black,
+          color: Color.fromARGB(255, 50, 50, 50),
         ),
         ),
         centerTitle: true,
       ),
+      backgroundColor:  Color.fromARGB(255, 255, 247, 225),
 
       body:
+
+      Stack(
+        children: [
+        Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: 30,
+          ),
+          Image.asset(
+            'assets/bg_img.png',
+            // Укажите размер изображения
+            width: MediaQuery.of(context).size.width * 1,
+            //height: MediaQuery.of(context).size.height * 1,
+            fit: BoxFit.fill,
+          ),
+        ],
+      ),
+
       ListView(
         children: [
           //SafeArea(child:
@@ -138,7 +159,7 @@ class Home_route_state extends State<Home_route>{
 
                               child:
                               Container(
-                                child: buildAvatar(adit_avatar),
+                                child: buildAvatar(edit_avatar),
                                 //padding: EdgeInsets.all(8),
                               )
 
@@ -151,7 +172,7 @@ class Home_route_state extends State<Home_route>{
 
                               CircleAvatar(
                                 radius: 20,
-                                backgroundColor: Color.fromARGB(255, 247, 183, 59),
+                                backgroundColor: Color.fromARGB(255, 163, 161, 225),
                                 child: IconButton(onPressed: (){
 
                                   pickImage();
@@ -179,6 +200,7 @@ class Home_route_state extends State<Home_route>{
 
               SizedBox(height: 30,),
               Card(
+                color: Color.fromARGB(200, 255, 255, 255),
                 child: TextField(
                   onChanged: (String user_name) {
                     setState(() {
@@ -200,6 +222,7 @@ class Home_route_state extends State<Home_route>{
 
               SizedBox(height: 10,),
               Card(
+                color: Color.fromARGB(200, 255, 255, 255),
                 child:
                 TextButton(
                   onPressed: () {
@@ -263,6 +286,7 @@ class Home_route_state extends State<Home_route>{
               SizedBox(height: 10,),
 
               Card(
+                color: Color.fromARGB(200, 255, 255, 255),
                 child: TextField(
                   keyboardType: TextInputType.emailAddress,
                   // obscureText: true,
@@ -282,6 +306,7 @@ class Home_route_state extends State<Home_route>{
               SizedBox(height: 10,),
 
               Card(
+                color: Color.fromARGB(200, 255, 255, 255),
                 child: TextField(
                   obscureText: _isObscured,
                   onChanged: (String password) {
@@ -306,6 +331,7 @@ class Home_route_state extends State<Home_route>{
               SizedBox(height: 10,),
 
               Card(
+                color: Color.fromARGB(200, 255, 255, 255),
                 child: TextField(
                   obscureText: _isObscured2,
                   onChanged: (String check){
@@ -340,29 +366,18 @@ class Home_route_state extends State<Home_route>{
 
               TextButton(
                 onPressed: () {
-                  // if(
-                  // (user_name_reg = "")||(user_password == "")||(avatarUrl == "")||(user_description == "")||(user_email =="")||(check_password == "")
-                  // ){
-                  //   showDialog(context: context, builder: (BuildContext context) {
-                  //     return AlertDialog(
-                  //       title: Text("Вы заполнили не все поля!",
-                  //         style:
-                  //         TextStyle(
-                  //           fontSize: 18,
-                  //           fontFamily: 'Oswald',
-                  //           color: Colors.black,
-                  //         ),),
-                  //
-                  //     );
-                  //   });
-                  // }
-                  if((user_name_edit != "")||(user_name_edit.trim().isEmpty)){
-                    Users.last.updateUsername(user_name_edit);
+                  if((user_name_edit != "")&&(user_name_edit.trim().isNotEmpty)){
+                    Users[(findUserByLoginAndPassword(Users, current_user.email, current_user.password)!.id) - 1].updateUsername(user_name_edit);
+                    current_user.updateUsername(user_name_edit);
+                    Navigator.push(context, PageTransition(type: PageTransitionType.fade, child: Reg_p()));
                   }
-                  if(adit_avatar != ""){
-                    Users.last.updateAvatarUrl(adit_avatar);
+                  if(edit_avatar != null){
+
+                    Users[(findUserByLoginAndPassword(Users, current_user.email, current_user.password)!.id) - 1].updateAvatarUrl(edit_avatar);
+                    current_user.updateAvatarUrl(edit_avatar);
+                    Navigator.push(context, PageTransition(type: PageTransitionType.fade, child: Reg_p()));
                   }
-                  if((user_password_edit != "")||(user_password_edit.trim().isEmpty)) {
+                  if((user_password_edit != "")&&(user_password_edit.trim().isNotEmpty)) {
                     if (user_password_edit != check_password) {
                       showDialog(
                           context: context, builder: (BuildContext context) {
@@ -398,38 +413,46 @@ class Home_route_state extends State<Home_route>{
                     }
 
                     else{
-                      Users.last.updatePassword(user_password_edit.trim());
+                      Users[(findUserByLoginAndPassword(Users, current_user.email, current_user.password)!.id) - 1].updatePassword(user_password_edit.trim());
+                      current_user.updatePassword(user_password_edit.trim());
+
+                      Navigator.push(context, PageTransition(type: PageTransitionType.fade, child: Reg_p()));
 
                     }
                   }
 
-                  if((user_email_edit != "")||(user_email_edit.trim().isEmpty)){
-                    Users.last.updateEmail(user_email_edit.trim());
+                  if((user_email_edit != "")||(user_email_edit.trim().isNotEmpty)){
+                    Users[(findUserByLoginAndPassword(Users, current_user.email, current_user.password)!.id) - 1].updateEmail(user_email_edit.trim());
+
+                    current_user.updateEmail(user_email_edit.trim());
+                    Navigator.push(context, PageTransition(type: PageTransitionType.fade, child: Reg_p()));
                   }
-                 if((DateTime.now().difference(birth_date).inDays / 365).floor() != Users.last.age){
+                  if((DateTime.now().difference(birth_date).inDays / 365).floor() != current_user.age){
 
-                   if(((DateTime.now().difference(birth_date).inDays / 365).floor() < 16)){
-                     showDialog(context: context, builder: (BuildContext context) {
-                       return AlertDialog(
-                         title: Text("К сожалению, вы не достигли возраста 16-ти лет и не можете использовать приложение.",
-                           style:
-                           TextStyle(
-                             fontSize: 18,
-                             fontFamily: 'Oswald',
-                             color: Colors.black,
-                           ),),
+                    if(((DateTime.now().difference(birth_date).inDays / 365).floor() < 16)){
+                      showDialog(context: context, builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text("К сожалению, ваш новый возраст меньше 16-ти лет",
+                            style:
+                            TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Oswald',
+                              color: Colors.black,
+                            ),),
 
-                       );
-                     });
-                   }
+                        );
+                      });
+                    }
 
-                   else{
-                     Users.last.updateAge((DateTime.now().difference(birth_date).inDays / 365).toInt());
-                   }
+                    else{
+                      Users[(findUserByLoginAndPassword(Users, current_user.email, current_user.password)!.id) - 1].updateAge((DateTime.now().difference(birth_date).inDays / 365).toInt());
+                      current_user.updateAge((DateTime.now().difference(birth_date).inDays / 365).toInt());
 
-                 }
+                      Navigator.push(context, PageTransition(type: PageTransitionType.fade, child: Reg_p()));
+                    }
 
-                  Navigator.push(context, PageTransition(type: PageTransitionType.fade, child: Reg_p()));
+                  }
+
 
                   // else{
                   //   User user = User();
@@ -446,7 +469,7 @@ class Home_route_state extends State<Home_route>{
                 child: Text('Изменить данные', style:
                 TextStyle(
                   fontSize: 18,
-                  color: Colors.white,
+                  color: Color.fromARGB(255, 50, 50, 50),
                   fontFamily: 'Oswald',
                 ),
                 ),
@@ -454,10 +477,47 @@ class Home_route_state extends State<Home_route>{
                     shape: MaterialStateProperty.all(RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                     )),
-                    backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 16, 79, 58),),
+                    backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 163, 161, 225)),
                     minimumSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width-20,40))
                 ),
               ),
+              SizedBox(height: 25,),
+
+
+
+
+
+
+
+
+
+              TextButton(onPressed: (){
+                current_user = newObject();
+                Navigator.push(context, PageTransition(
+                    type: PageTransitionType.fade,
+                    // duration: Duration.millisecondsPerSecond(),
+                    alignment: Alignment.center,
+                    child: First_p())
+                );
+              },
+                  child: Text("Выход",
+                    style:
+                    TextStyle(
+                      fontSize: 18,
+                      color: Color.fromARGB(255, 50, 50, 50),
+                      fontFamily: 'Oswald',
+                    ),),
+                style: ButtonStyle(
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    )),
+                    backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 158, 158, 158),),
+                    minimumSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width-20,40))
+                ),
+
+
+              ),
+
               SizedBox(
                 height: 50,
               )
@@ -466,8 +526,12 @@ class Home_route_state extends State<Home_route>{
           // )
         ],
       ),
+      ]
+      ),
 
     );
   }
 }
+
+
 
