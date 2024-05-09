@@ -21,7 +21,6 @@ import 'package:file_picker/file_picker.dart';
 
 import 'dart:html' as html;
 
-import 'package:im2/services/api/api_service.dart';
 
 class PickedImage {
   final html.File file;
@@ -142,7 +141,7 @@ class Home_route_state extends State<Home_route>{
           title: Text('Регистрация', style:
           TextStyle(
             fontSize: 30,
-            fontFamily: 'Oswald',
+            fontFamily: 'Montserrat',
             color: Color.fromARGB(255, 50, 50, 50),
           ),
           ),
@@ -230,7 +229,7 @@ class Home_route_state extends State<Home_route>{
 
                 SizedBox(height: 30,),
                 Card(
-                  color: Color.fromARGB(200, 255, 255, 255),
+                  color: Color.fromARGB(255, 255, 255, 255),
                   child: TextField(
                     onChanged: (String user_name) {
                       setState(() {
@@ -242,7 +241,10 @@ class Home_route_state extends State<Home_route>{
                     //Padding(padding: const EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),),
                     InputDecoration(
                       labelText: 'Имя пользователя',
-                      labelStyle: TextStyle(fontSize: 17, color: Colors.blueGrey, fontFamily: 'Oswald'),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey), // Устанавливаем цвет рамки при фокусе
+                      ),
+                      labelStyle: TextStyle(fontSize: 16, color: Colors.blueGrey, fontFamily: 'Montserrat', fontWeight: FontWeight.w900),
                       contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
                     ),
                   ),
@@ -275,7 +277,7 @@ class Home_route_state extends State<Home_route>{
       style: TextStyle(
       fontSize: 18,
       color: Colors.blueGrey,
-      fontFamily: 'Oswald',
+      fontFamily: 'Montserrat',
         ),
       ),
       Text(
@@ -285,7 +287,7 @@ class Home_route_state extends State<Home_route>{
       style: TextStyle(
        fontSize: 17,
         color: Colors.black,
-        fontFamily: 'Oswald',
+        fontFamily: 'Montserrat',
       ),
       ),
     ],
@@ -297,15 +299,18 @@ class Home_route_state extends State<Home_route>{
                 SizedBox(height: 10,),
 
                 Card(
-                  color: Color.fromARGB(200, 255, 255, 255),
+                  color: Color.fromARGB(255, 255, 255, 255),//НУЖНЫЙ ДИЗАЙН
                   child: TextField(
                     //keyboardType: TextInputType.emailAddress,
                     // obscureText: true,
                     decoration:
                     //Padding(padding: const EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),),
                     InputDecoration(
-                      labelText: 'Опишите себя: вашу профессию, образование, хобби...',
-                      labelStyle: TextStyle(fontSize: 17, color: Colors.blueGrey, fontFamily: 'Oswald'),
+                      labelText: 'Пару слов о себе...',
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey), // Устанавливаем цвет рамки при фокусе
+                      ),
+                      labelStyle: TextStyle(fontSize: 16, color: Colors.blueGrey, fontFamily: 'Montserrat', fontWeight: FontWeight.w900),
                       contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
                     ),
                     onChanged: (String description) {
@@ -317,7 +322,7 @@ class Home_route_state extends State<Home_route>{
                 SizedBox(height: 10,),
 
                 Card(
-                  color: Color.fromARGB(200, 255, 255, 255),
+                  color: Color.fromARGB(255, 255, 255, 255),
                   child: TextField(
                     keyboardType: TextInputType.emailAddress,
                     // obscureText: true,
@@ -325,7 +330,10 @@ class Home_route_state extends State<Home_route>{
                     //Padding(padding: const EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),),
                     InputDecoration(
                       labelText: 'Почта',
-                      labelStyle: TextStyle(fontSize: 17, color: Colors.blueGrey, fontFamily: 'Oswald'),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey), // Устанавливаем цвет рамки при фокусе
+                      ),
+                      labelStyle: TextStyle(fontSize: 16, color: Colors.blueGrey, fontFamily: 'Montserrat', fontWeight: FontWeight.w900),
                       contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
                     ),
                     onChanged: (String email) {
@@ -337,7 +345,7 @@ class Home_route_state extends State<Home_route>{
                 SizedBox(height: 10,),
 
                 Card(
-                  color: Color.fromARGB(200, 255, 255, 255),
+                  color: Color.fromARGB(255, 255, 255, 255),
                   child: TextField(
 
                     obscureText: _isObscured,
@@ -354,7 +362,10 @@ class Home_route_state extends State<Home_route>{
                         },
                       ),
                       labelText: 'Пароль',
-                      labelStyle: TextStyle(fontSize: 17, color: Colors.blueGrey, fontFamily: 'Oswald'),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey), // Устанавливаем цвет рамки при фокусе
+                      ),
+                      labelStyle: TextStyle(fontSize: 16, color: Colors.blueGrey, fontFamily: 'Montserrat', fontWeight: FontWeight.w900),
                       contentPadding: EdgeInsets.fromLTRB(15.0, 0.0, 0.0, 0.0),
                     ),
                   ),
@@ -460,17 +471,20 @@ class Home_route_state extends State<Home_route>{
                       });
                     }
                     else{
-                      User user = User();
-                      Users.add(User()
-                      );
-                      if((user_email == "admin@mail.ru")&&(user_password == "admin_password")){
-                        current_user.register(user_name_reg, user_password, avatarUrl, (DateTime.now().difference(birth_date).inDays / 365).floor() , Users.length, user_description, user_email, true);
-                      }
-                      else{
-                        Users.last.register(user_name_reg, user_password, avatarUrl, (DateTime.now().difference(birth_date).inDays / 365).floor() , Users.length, user_description, user_email, false);
-                        current_user = Users.last;
-                      }
-
+                      User newuser = User();
+                      newuser.register(user_name_reg, user_password, avatarUrl, (DateTime.now().difference(birth_date).inDays / 365).floor() , user_description, user_email, false);
+                      //print('AAAAAAAAAAAAAAAUser registered on Firestore');
+                      current_user = newuser;
+                      // User user = User();
+                      // Users.add(User()
+                      // );
+                      // if((user_email == "admin@mail.ru")&&(user_password == "admin_password")){
+                      //   current_user.register(user_name_reg, user_password, avatarUrl, (DateTime.now().difference(birth_date).inDays / 365).floor() , Users.length, user_description, user_email, true);
+                      // }
+                      // else{
+                      //   Users.last.register(user_name_reg, user_password, avatarUrl, (DateTime.now().difference(birth_date).inDays / 365).floor() , Users.length, user_description, user_email, false);
+                      //   current_user = Users.last;
+                      // }
 
 
                     //

@@ -40,6 +40,13 @@
   <script src="flutter.js" defer></script>
 </head>
 <body>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js"></script>
+<script src="path/to/your/firebaseConfig.js"></script>
+<script>
+  // Инициализация Firebase
+  firebase.initializeApp(firebaseConfig);
+</script>
   <script>
     window.addEventListener('load', function(ev) {
       // Download main.dart.js
